@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jadwal Training New Staff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050507;
+    --bg-2: #0a0a0d;
+    --surface: rgba(255,255,255,0.045);
+    --surface-2: rgba(255,255,255,0.07);
+    --border: rgba(255,255,255,0.09);
+    --border-strong: rgba(255,255,255,0.16);
+    --text: #f5f5f7;
+    --text-dim: #9a9aa2;
+    --text-faint: #6b6b72;
+    --accent: #0a84ff;
+    --accent-soft: rgba(10,132,255,0.14);
+    --accent-border: rgba(10,132,255,0.35);
+    --danger: #ff453a;
+    --danger-soft: rgba(255,69,58,0.12);
+    --warn: #ff9f0a;
+    --warn-soft: rgba(255,159,10,0.12);
+    --radius-lg: 26px;
+    --radius-md: 16px;
+    --radius-sm: 11px;
+    --font-display: 'Manrope', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; }
+  button { font: inherit; color: inherit; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 48px 16px 80px;
+    position: relative;
+    overflow-x: hidden;
+    transition: background 0.4s ease, color 0.4s ease;
+  }
+
+  body::before, body::after {
+    content: "";
+    position: fixed;
+    width: 620px;
+    height: 620px;
+    border-radius: 50%;
+    filter: blur(120px);
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.35;
+  }
+  body::before { top: -220px; left: -180px; background: radial-gradient(circle, rgba(10,132,255,0.55), transparent 70%); }
+  body::after { bottom: -260px; right: -200px; background: radial-gradient(circle, rgba(191,90,242,0.35), transparent 70%); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    body::before { animation: drift1 22s ease-in-out infinite alternate; }
+    body::after { animation: drift2 26s ease-in-out infinite alternate; }
+  }
+  @keyframes drift1 { from { transform: translate(0,0); } to { transform: translate(60px, 40px); } }
+  @keyframes drift2 { from { transform: translate(0,0); } to { transform: translate(-50px, -30px); } }
+
+  body.light-mode {
+    --bg: #f5f5f7;
+    --bg-2: #ffffff;
+    --surface: rgba(255,255,255,0.7);
+    --surface-2: rgba(255,255,255,0.9);
+    --border: rgba(0,0,0,0.08);
+    --border-strong: rgba(0,0,0,0.14);
+    --text: #1d1d1f;
+    --text-dim: #6e6e73;
+    --text-faint: #8a8a8e;
+    --accent: #0066cc;
+    --accent-soft: rgba(0,102,204,0.08);
+    --accent-border: rgba(0,102,204,0.28);
+    --danger: #d70015;
+    --danger-soft: rgba(215,0,21,0.08);
+  }
+  body.light-mode::before { opacity: 0.18; }
+  body.light-mode::after { opacity: 0.15; }
+
+  .wrap { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+
+  /* ---------- Header ---------- */
+  .header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 28px; }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .eyebrow::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+  h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.7rem, 5vw, 2.35rem); margin: 0; letter-spacing: -0.02em; line-height: 1.1; }
+
+  .theme-toggle-btn {
+    flex-shrink: 0;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 1.15rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(12px);
+    transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+    padding: 0;
+    line-height: 1;
+  }
+  .theme-toggle-btn:hover { transform: scale(1.06) rotate(-6deg); border-color: var(--border-strong); }
+  .theme-toggle-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- Stat strip ---------- */
+  .stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 22px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 10px; text-align: center; backdrop-filter: blur(12px); }
+  .stat-num { font-family: var(--font-mono); font-weight: 600; font-size: 1.4rem; color: var(--accent); display: block; line-height: 1.1; }
+  .stat-label { font-size: 0.66rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; display: block; }
+
+  /* ---------- Panels ---------- */
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); margin-bottom: 18px; }
+  .panel-title { font-family: var(--font-display); font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-faint); margin: 0 0 14px; }
+
+  .subsection + .subsection { margin-top: 22px; padding-top: 22px; border-top: 1px dashed var(--border-strong); }
+  .subsection-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: var(--text);
+    margin: 0 0 14px;
+  }
+  .subsection-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .date-field { flex: 1; min-width: 160px; display: flex; flex-direction: column; gap: 6px; }
+  .date-field label { font-size: 0.78rem; color: var(--text-dim); font-weight: 500; }
+  input[type="date"] {
+    padding: 0 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    color: var(--text);
+    font-family: var(--font-body);
+    outline: none;
+    width: 100%;
+    height: 40px;
+    line-height: 1.2;
+    display: block;
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.6); cursor: pointer; }
+  body.light-mode input[type="date"]::-webkit-calendar-picker-indicator { filter: none; }
+  input[type="date"]:focus-visible { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+
+  .btn {
+    box-sizing: border-box;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.86rem;
+    font-family: var(--font-body);
+    border: 1px solid transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 6px 20px rgba(10,132,255,0.35); white-space: nowrap; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(10,132,255,0.45); }
+  .btn-primary:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn-outline { background: var(--surface-2); color: var(--text); white-space: nowrap; }
+  .btn-outline:hover { border-color: var(--accent-border); background: var(--accent-soft); transform: translateY(-1px); }
+  .btn-outline:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .btn-outline { border: 1px solid var(--border); }
+
+  /* Trainer picker: single reveal button opens a popup */
+  .trainer-picker-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .selected-trainer-pill {
+    display: none;
+    align-items: center; gap: 8px;
+    background: var(--accent-soft); border: 1px solid var(--accent-border);
+    padding: 5px 14px 5px 5px; border-radius: 20px;
+    font-size: 0.85rem; font-weight: 600;
+  }
+  .trainer-select-list { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 60;
+    padding: 24px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-card {
+    width: 100%;
+    max-width: 420px;
+    max-height: 76vh;
+    overflow-y: auto;
+    background: var(--bg-2);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    box-shadow: 0 24px 70px rgba(0,0,0,0.5);
+    animation: modalRise 0.25s ease;
+  }
+  @media (prefers-reduced-motion: reduce) { .modal-card { animation: none; } }
+  @keyframes modalRise { from { opacity: 0; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .modal-title { font-family: var(--font-display); font-weight: 800; font-size: 1rem; margin: 0; }
+  .modal-close {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 1px solid var(--border); background: var(--surface-2);
+    color: var(--text); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem; flex-shrink: 0;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .modal-close:hover { background: var(--accent-soft); border-color: var(--accent-border); }
+  .modal-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .trainer-chip {
+    box-sizing: border-box;
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface-2); color: var(--text);
+    border: 1px solid var(--border);
+    padding: 7px 14px 7px 7px;
+    border-radius: 24px;
+    font-size: 0.86rem; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    appearance: none; -webkit-appearance: none;
+    font-family: var(--font-body);
+  }
+  .trainer-chip:hover { border-color: var(--accent-border); background: var(--accent-soft); transform: translateY(-1px); }
+  .trainer-chip:focus-visible { outline: 2px solid var(--accent); }
+  .trainer-chip.selected { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 0 1px var(--accent) inset; }
+
+  .avatar {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.62rem; font-weight: 700; color: #05050a; flex-shrink: 0;
+  }
+
+  /* Quick links grid */
+  .link-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .link-card {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.88rem;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    text-align: left;
+    appearance: none;
+    -webkit-appearance: none;
+    line-height: 1.2;
+  }
+  .link-card:hover { transform: translateY(-2px); border-color: var(--accent-border); background: var(--accent-soft); }
+  .link-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .link-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: var(--accent-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  /* ---------- Lookup result ---------- */
+  .result-wrap { margin-top: 14px; }
+  .result-wrap:empty { margin-top: 0; }
+  .result-card {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 20px;
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    opacity: 0;
+    transform: translateY(8px);
+    animation: rise 0.4s ease forwards;
+  }
+  @media (prefers-reduced-motion: reduce) { .result-card { animation: none; opacity: 1; transform: none; } }
+  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+
+  .result-card.holiday { border-left-color: var(--danger); background: var(--danger-soft); }
+  .result-card.empty { border-left-color: var(--text-faint); }
+  .result-card.oor { border-left-color: var(--warn); background: var(--warn-soft); }
+
+  .result-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+  .result-body { flex: 1; min-width: 0; }
+  .result-date { font-size: 0.76rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; font-family: var(--font-mono); }
+  .result-topic { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; margin-bottom: 6px; }
+  .result-trainers { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .result-trainer-chip {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface-2); border: 1px solid var(--border);
+    padding: 6px 12px 6px 6px; border-radius: 20px;
+    font-size: 0.85rem; font-weight: 600;
+  }
+  .result-note { color: var(--text-dim); font-size: 0.9rem; line-height: 1.5; }
+  .badge-holiday { display: inline-block; background: var(--danger); color: white; font-size: 0.66rem; font-weight: 700; padding: 2px 8px; border-radius: 6px; margin-left: 8px; letter-spacing: 0.04em; vertical-align: middle; }
+
+  .result-session-list { margin-top: 10px; }
+  .result-session-item {
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent); border-radius: var(--radius-sm);
+    padding: 10px 14px; margin-bottom: 8px;
+  }
+  .result-session-item strong { display: block; font-size: 0.92rem; margin-bottom: 2px; }
+  .result-session-item span { font-size: 0.8rem; color: var(--text-dim); }
+
+  /* ---------- Full schedule, grouped by month / week / date ---------- */
+  .directory-grid { display: flex; flex-direction: column; }
+  .month-group + .month-group { margin-top: 26px; padding-top: 26px; border-top: 1px dashed var(--border-strong); }
+  .month-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: var(--text);
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .month-title::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+    flex-shrink: 0;
+  }
+  .week-group + .week-group { margin-top: 18px; }
+  .week-title {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-border);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin: 0 0 10px;
+  }
+  .week-rows { display: flex; flex-direction: column; gap: 9px; }
+  .schedule-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-md);
+    padding: 12px 15px;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  }
+  .schedule-row:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-border);
+    background: var(--accent-soft);
+    box-shadow: 0 8px 20px rgba(10,132,255,0.14);
+  }
+  .schedule-row-date {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-faint);
+    white-space: nowrap;
+    min-width: 88px;
+    padding-top: 3px;
+  }
+  .schedule-row-body { flex: 1; min-width: 0; }
+  .schedule-row-topic { display: block; font-weight: 700; font-size: 0.9rem; margin-bottom: 7px; }
+  .schedule-row-trainers { display: flex; flex-wrap: wrap; gap: 6px; }
+  .mini-trainer-chip {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 3px 10px 3px 3px; border-radius: 16px;
+    font-size: 0.74rem; font-weight: 600;
+  }
+  .mini-trainer-chip .avatar { width: 18px; height: 18px; font-size: 0.54rem; }
+
+  footer { text-align: center; color: var(--text-faint); font-size: 0.75rem; margin-top: 30px; font-family: var(--font-mono); position: relative; z-index: 1; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="header">
+    <div>
+      <div class="eyebrow">Digimap • Partner Trainer</div>
+      <h1>Jadwal Training New Staff</h1>
+    </div>
+    <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Beralih Mode Gelap/Terang">🌙</button>
+  </div>
+
+  <div class="stat-strip" id="statStrip"></div>
+
+  <div class="panel">
+    <p class="panel-title">Cek Jadwal</p>
+
+    <div class="subsection">
+      <p class="subsection-title"><span class="subsection-num">1</span>Cek Berdasarkan Tanggal</p>
+      <div class="trainer-picker-row">
+        <button type="button" class="btn btn-outline" id="openDateModalBtn" onclick="openDateModal()">Pilih Tanggal</button>
+        <div class="selected-trainer-pill" id="selectedDatePill"></div>
+      </div>
+      <button class="btn btn-primary" id="checkDateBtn" onclick="checkDate()" style="display:none; margin-top:12px;">Cek Jadwal</button>
+      <div class="result-wrap" id="dateResult"></div>
+    </div>
+
+    <div class="subsection">
+      <p class="subsection-title"><span class="subsection-num">2</span>Cek Berdasarkan Nama Trainer</p>
+      <div class="trainer-picker-row">
+        <button type="button" class="btn btn-outline" id="openTrainerModalBtn" onclick="openTrainerModal()">Tampilkan Semua Trainer</button>
+        <div class="selected-trainer-pill" id="selectedTrainerPill"></div>
+      </div>
+      <button class="btn btn-primary" id="checkTrainerBtn" onclick="checkTrainer()" disabled style="display:none; margin-top:12px;">Cek Jadwal</button>
+      <div class="result-wrap" id="trainerResult"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="dateModalOverlay" onclick="closeDateModalOnOverlay(event)">
+    <div class="modal-card">
+      <div class="modal-header">
+        <p class="modal-title">Pilih Tanggal</p>
+        <button type="button" class="modal-close" onclick="closeDateModal()" aria-label="Tutup">✕</button>
+      </div>
+      <div class="date-field" style="margin-bottom: 16px;">
+        <label for="checkDate">Tanggal</label>
+        <input type="date" id="checkDate" value="2026-08-26">
+      </div>
+      <button type="button" class="btn btn-primary" style="width:100%;" onclick="confirmDateSelection()">Pilih Tanggal Ini</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="trainerModalOverlay" onclick="closeTrainerModalOnOverlay(event)">
+    <div class="modal-card">
+      <div class="modal-header">
+        <p class="modal-title">Pilih Trainer</p>
+        <button type="button" class="modal-close" onclick="closeTrainerModal()" aria-label="Tutup">✕</button>
+      </div>
+      <div class="trainer-select-list" id="trainerSelectList"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <p class="panel-title">Akses Cepat</p>
+    <div class="link-grid">
+      <a href="https://docs.google.com/spreadsheets/d/1LNRcRyfcSDkPCZlKvZawvtHbLgF42x8r1ZEbSJWKJQ0/edit?usp=sharing" target="_blank" class="link-card"><span class="link-icon">📋</span>Absensi Training</a>
+      <a href="https://docs.google.com/spreadsheets/d/1wVB1gFV1sGH4j9WvtBRYXqR-fVaDjOhTQ6xnDJ4TLcU/edit?usp=sharing" target="_blank" class="link-card"><span class="link-icon">💬</span>Feedback Training</a>
+      <a href="https://padlet.com/zalianadigimap/NewStaff26Aug_10Sept2026" target="_blank" class="link-card"><span class="link-icon">🧵</span>Padlet New Staff</a>
+      <a href="https://forms.gle/cs8nefmppk34yHfW8" target="_blank" class="link-card"><span class="link-icon">📝</span>Form Survey</a>
+      <a href="https://teams.microsoft.com/meet/471983732013684?p=5T9sTt8TRIuEZ87MoA" target="_blank" class="link-card" style="grid-column: 1 / -1;"><span class="link-icon">💻</span>Link Teams</a>
+    </div>
+  </div>
+
+  <div class="panel">
+    <p class="panel-title">Download Materi</p>
+    <div class="link-grid">
+      <a href="https://mega.nz/folder/Mld3iL5K#cZi_NcO2KbcupTim7Uafcw" target="_blank" rel="noopener" class="link-card" style="grid-column: 1 / -1;"><span class="link-icon">🍎</span>Materi Apple</a>
+      <a href="https://mega.nz/folder/d8Fg3Ywa#MobjiJndMsUhJ-fQJ4WErQ" target="_blank" rel="noopener" class="link-card" style="grid-column: 1 / -1;"><span class="link-icon">📦</span>New Staff Training Module</a>
+    </div>
+  </div>
+
+  <div class="panel">
+    <p class="panel-title">Seluruh Jadwal Trainer &middot; per Bulan &amp; Minggu</p>
+    <div class="directory-grid" id="trainerDirectory"></div>
+  </div>
+
+  <footer>Digimap Trainer — Onboarding System</footer>
+</div>
+
+<script>
+  const FIXED_START_DATE = "2026-08-26";
+
+  const masterData = [
+    { topic: "ACE", pic: "Ni Kadek Arum Darmayanti" },
+    { topic: "Digicares 1", pic: "Fernaldi Akbar" },
+    { topic: "Digicares 2", pic: "Vionita, Indah Rama Dhani" },
+    { topic: "Digicares 3", pic: "Yuniar Puspitasari, Chandra Dewi Kusumaningrum" },
+    { topic: "Accessories Workshop", pic: "Ferdiansyah Yogi Pratama, Dimas Anugrah Perdana" },
+    { topic: "iPhone Family", pic: "Dinda Audina, Usmani Abrar" },
+    { topic: "iPad Family", pic: "Widya Putri Kirana, Tommy" },
+    { topic: "iOS & iPadOS", pic: "Fadlun, Yoga Guntoro, Siti Fatimah Azzahrah" },
+    { topic: "Basic Technology", pic: "Frandy Putra, Muhammad Ridwan" },
+    { topic: "Mac Family", pic: "Muhammad Iqbal Augustiyant, Rima Mutia Kustianti, Oky Hidayatulloh" },
+    { topic: "macOS", pic: "Nentri Firmadoni, Jaya, Dede Riadi" },
+    { topic: "Apple Watch & watchOS", pic: "Rachel Jennifer Victoria, Febi Ristian, Andy Firmansyah" }
+  ];
+
+  const nationalHolidays2026 = {
+    "2026-01-01": "Tahun Baru 2026 Masehi",
+    "2026-01-16": "Isra Mikraj Nabi Muhammad SAW",
+    "2026-02-17": "Tahun Baru Imlek 2577 Kongzili",
+    "2026-03-19": "Hari Suci Nyepi (Tahun Baru Saka 1948)",
+    "2026-03-20": "Hari Raya Idul Fitri 1447 Hijriah (Hari Ke-1)",
+    "2026-03-21": "Hari Raya Idul Fitri 1447 Hijriah (Hari Ke-2)",
+    "2026-04-03": "Wafat Yesus Kristus",
+    "2026-04-05": "Hari Paskah (Kebangkitan Yesus Kristus)",
+    "2026-05-01": "Hari Buruh Internasional",
+    "2026-05-14": "Kenaikan Yesus Kristus",
+    "2026-05-27": "Hari Raya Idul Adha 1447 Hijriah",
+    "2026-05-31": "Hari Raya Waisak 2570 BE",
+    "2026-06-01": "Hari Lahir Pancasila",
+    "2026-06-16": "Tahun Baru Islam 1448 Hijriah",
+    "2026-08-17": "Hari Kemerdekaan Republik Indonesia",
+    "2026-08-25": "Maulid Nabi Muhammad SAW",
+    "2026-12-25": "Hari Raya Natal"
+  };
+
+  const monthNames = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+  const dayNames = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+  const avatarPalette = ["#0a84ff","#bf5af2","#ff375f","#30d158","#ff9f0a","#64d2ff","#ffd60a"];
+
+  let scheduleMap = {};       // YMD -> { type, topic, pic, holidayName, dayName, dateNum, monthName }
+  let trainerSchedule = {};   // name -> [{topic, dayName, dateNum, monthName}]
+  let programStart = null;
+  let programEnd = null;
+  let programStats = { materi: 0, trainer: 0, minggu: 0, libur: 0 };
+  let selectedTrainer = null;
+
+  function formatDateToYMD(d) {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  function hashColor(name) {
+    let sum = 0;
+    for (let i = 0; i < name.length; i++) sum += name.charCodeAt(i);
+    return avatarPalette[sum % avatarPalette.length];
+  }
+
+  function initials(name) {
+    const parts = name.trim().split(/\s+/);
+    return ((parts[0]?.[0] || "") + (parts[1]?.[0] || "")).toUpperCase();
+  }
+
+  // Precompute the fixed 12-topic program once, so the date/trainer pickers become lookups.
+  function buildProgram() {
+    let currentDate = new Date(FIXED_START_DATE + "T00:00:00");
+    programStart = new Date(currentDate);
+    scheduleMap = {};
+    trainerSchedule = {};
+
+    let currentWeekNumber = 1;
+    let itemsInCurrentWeek = 0;
+    let holidayCount = 0;
+    let itemIndex = 0;
+
+    while (itemIndex < masterData.length) {
+      const dayOfWeek = currentDate.getDay();
+
+      if (dayOfWeek === 0 || dayOfWeek === 6) {
+        currentDate.setDate(currentDate.getDate() + 1);
+        continue;
+      }
+
+      if (itemsInCurrentWeek > 0 && dayOfWeek === 1) {
+        currentWeekNumber++;
+        itemsInCurrentWeek = 0;
+      }
+
+      const formattedDate = formatDateToYMD(currentDate);
+      const dayName = dayNames[dayOfWeek];
+      const dateNum = currentDate.getDate();
+      const monthName = monthNames[currentDate.getMonth()];
+      const holidayName = nationalHolidays2026[formattedDate];
+
+      if (holidayName) {
+        holidayCount++;
+        scheduleMap[formattedDate] = { type: "holiday", holidayName, dayName, dateNum, monthName };
+        itemsInCurrentWeek++;
+      } else {
+        const item = masterData[itemIndex];
+        scheduleMap[formattedDate] = { type: "session", topic: item.topic, pic: item.pic, dayName, dateNum, monthName, index: itemIndex + 1, weekNumber: currentWeekNumber };
+        itemsInCurrentWeek++;
+
+        const trainerNames = item.pic.split(",").map(n => n.trim());
+        trainerNames.forEach(name => {
+          if (!trainerSchedule[name]) trainerSchedule[name] = [];
+          trainerSchedule[name].push({ topic: item.topic, dayName, dateNum, monthName });
+        });
+
+        itemIndex++;
+      }
+
+      programEnd = new Date(currentDate);
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    programStats = {
+      materi: masterData.length,
+      trainer: Object.keys(trainerSchedule).length,
+      minggu: currentWeekNumber,
+      libur: holidayCount
+    };
+
+    renderStatStrip();
+    renderTrainerSelectList();
+    renderFullSchedule();
+  }
+
+  function renderStatStrip() {
+    const statStrip = document.getElementById("statStrip");
+    statStrip.innerHTML = `
+      <div class="stat-card"><span class="stat-num">${programStats.materi}</span><span class="stat-label">Materi</span></div>
+      <div class="stat-card"><span class="stat-num">${programStats.trainer}</span><span class="stat-label">Trainer</span></div>
+      <div class="stat-card"><span class="stat-num">${programStats.minggu}</span><span class="stat-label">Minggu</span></div>
+      <div class="stat-card"><span class="stat-num">${programStats.libur}</span><span class="stat-label">Hari Libur</span></div>
+    `;
+  }
+
+  function renderResult(targetId, html, extraClass) {
+    document.getElementById(targetId).innerHTML = `
+      <div class="result-card ${extraClass || ""}">${html}</div>
+    `;
+  }
+
+  // ---------- Section 1: lookup by date ----------
+  function openDateModal() {
+    document.getElementById("dateModalOverlay").classList.add("open");
+  }
+
+  function closeDateModal() {
+    document.getElementById("dateModalOverlay").classList.remove("open");
+  }
+
+  function closeDateModalOnOverlay(event) {
+    if (event.target === event.currentTarget) closeDateModal();
+  }
+
+  function updateSelectedDatePill() {
+    const inputVal = document.getElementById("checkDate").value;
+    if (!inputVal) return;
+
+    const picked = new Date(inputVal + "T00:00:00");
+    const dayName = dayNames[picked.getDay()];
+    const dateNum = picked.getDate();
+    const monthName = monthNames[picked.getMonth()];
+
+    const pill = document.getElementById("selectedDatePill");
+    pill.style.display = "flex";
+    pill.textContent = `${dayName}, ${dateNum} ${monthName} 2026`;
+
+    const checkBtn = document.getElementById("checkDateBtn");
+    checkBtn.style.display = "inline-flex";
+  }
+
+  function confirmDateSelection() {
+    const inputVal = document.getElementById("checkDate").value;
+    if (!inputVal) return;
+    updateSelectedDatePill();
+    closeDateModal();
+  }
+
+  function checkDate() {
+    const inputVal = document.getElementById("checkDate").value;
+    if (!inputVal) return;
+
+    const picked = new Date(inputVal + "T00:00:00");
+    const ymd = formatDateToYMD(picked);
+    const dayOfWeek = picked.getDay();
+    const dayName = dayNames[dayOfWeek];
+    const dateNum = picked.getDate();
+    const monthName = monthNames[picked.getMonth()];
+
+    const entry = scheduleMap[ymd];
+
+    if (entry && entry.type === "session") {
+      const trainerNames = entry.pic.split(",").map(n => n.trim());
+      const chips = trainerNames.map(name => `
+        <div class="result-trainer-chip">
+          <span class="avatar" style="background:${hashColor(name)}">${initials(name)}</span>
+          ${name}
+        </div>
+      `).join("");
+
+      renderResult("dateResult", `
+        <div class="result-icon">📘</div>
+        <div class="result-body">
+          <div class="result-date">${dayName}, ${dateNum} ${monthName} · Materi ${String(entry.index).padStart(2,'0')}</div>
+          <div class="result-topic">${entry.topic}</div>
+          <div class="result-trainers">${chips}</div>
+        </div>
+      `);
+      return;
+    }
+
+    if (entry && entry.type === "holiday") {
+      renderResult("dateResult", `
+        <div class="result-icon">🎌</div>
+        <div class="result-body">
+          <div class="result-date">${dayName}, ${dateNum} ${monthName}</div>
+          <div class="result-topic">Libur Nasional<span class="badge-holiday">LIBUR</span></div>
+          <div class="result-note">${entry.holidayName}. Tidak ada sesi training pada tanggal ini.</div>
+        </div>
+      `, "holiday");
+      return;
+    }
+
+    if (dayOfWeek === 0 || dayOfWeek === 6) {
+      renderResult("dateResult", `
+        <div class="result-icon">🛌</div>
+        <div class="result-body">
+          <div class="result-date">${dayName}, ${dateNum} ${monthName}</div>
+          <div class="result-topic">Akhir Pekan</div>
+          <div class="result-note">Tidak ada training terjadwal pada akhir pekan.</div>
+        </div>
+      `, "empty");
+      return;
+    }
+
+    const startLabel = `${programStart.getDate()} ${monthNames[programStart.getMonth()]}`;
+    const endLabel = `${programEnd.getDate()} ${monthNames[programEnd.getMonth()]}`;
+    renderResult("dateResult", `
+      <div class="result-icon">⏳</div>
+      <div class="result-body">
+        <div class="result-date">${dayName}, ${dateNum} ${monthName}</div>
+        <div class="result-topic">Di Luar Periode Program</div>
+        <div class="result-note">Tanggal ini berada di luar periode training new staff (${startLabel} – ${endLabel}).</div>
+      </div>
+    `, "oor");
+  }
+
+  // ---------- Section 2: lookup by trainer ----------
+  function renderTrainerSelectList() {
+    const el = document.getElementById("trainerSelectList");
+    const names = Object.keys(trainerSchedule).sort((a, b) => a.localeCompare(b));
+
+    el.innerHTML = names.map(name => `
+      <button type="button" class="trainer-chip" data-name="${name.replace(/"/g, "&quot;")}" onclick="selectTrainer(this)">
+        <span class="avatar" style="background:${hashColor(name)}">${initials(name)}</span>
+        ${name}
+      </button>
+    `).join("");
+  }
+
+  function openTrainerModal() {
+    document.getElementById("trainerModalOverlay").classList.add("open");
+  }
+
+  function closeTrainerModal() {
+    document.getElementById("trainerModalOverlay").classList.remove("open");
+  }
+
+  function closeTrainerModalOnOverlay(event) {
+    if (event.target === event.currentTarget) closeTrainerModal();
+  }
+
+  function selectTrainer(btn) {
+    document.querySelectorAll(".trainer-chip").forEach(c => c.classList.remove("selected"));
+    btn.classList.add("selected");
+    selectedTrainer = btn.getAttribute("data-name");
+
+    const checkBtn = document.getElementById("checkTrainerBtn");
+    checkBtn.disabled = false;
+    checkBtn.style.display = "inline-flex";
+
+    const pill = document.getElementById("selectedTrainerPill");
+    pill.style.display = "flex";
+    pill.innerHTML = `
+      <span class="avatar" style="background:${hashColor(selectedTrainer)}">${initials(selectedTrainer)}</span>
+      ${selectedTrainer}
+    `;
+
+    closeTrainerModal();
+  }
+
+  function checkTrainer() {
+    if (!selectedTrainer) return;
+    const sessions = trainerSchedule[selectedTrainer] || [];
+
+    const itemsHtml = sessions.map(s => `
+      <div class="result-session-item">
+        <strong>${s.topic}</strong>
+        <span>${s.dayName}, ${s.dateNum} ${s.monthName}</span>
+      </div>
+    `).join("");
+
+    renderResult("trainerResult", `
+      <div class="result-icon"><span class="avatar" style="background:${hashColor(selectedTrainer)};width:34px;height:34px;font-size:0.8rem;">${initials(selectedTrainer)}</span></div>
+      <div class="result-body">
+        <div class="result-date">${sessions.length} sesi dijadwalkan</div>
+        <div class="result-topic">${selectedTrainer}</div>
+        <div class="result-session-list">${itemsHtml || '<div class="result-note">Tidak ada jadwal untuk trainer ini.</div>'}</div>
+      </div>
+    `);
+  }
+
+  // ---------- Full schedule, always visible, grouped by month -> week -> date ----------
+  function renderFullSchedule() {
+    const el = document.getElementById("trainerDirectory");
+
+    // scheduleMap keys are inserted in chronological order (day by day from
+    // the program start), so iterating Object.keys preserves date order.
+    const months = [];
+    const monthIndex = {};
+
+    Object.keys(scheduleMap).forEach(ymd => {
+      const entry = scheduleMap[ymd];
+      if (entry.type !== "session") return;
+
+      if (!monthIndex[entry.monthName]) {
+        monthIndex[entry.monthName] = { name: entry.monthName, weeks: [], weekIndex: {} };
+        months.push(monthIndex[entry.monthName]);
+      }
+      const monthObj = monthIndex[entry.monthName];
+
+      if (!monthObj.weekIndex[entry.weekNumber]) {
+        monthObj.weekIndex[entry.weekNumber] = { num: entry.weekNumber, items: [] };
+        monthObj.weeks.push(monthObj.weekIndex[entry.weekNumber]);
+      }
+      monthObj.weekIndex[entry.weekNumber].items.push(entry);
+    });
+
+    el.innerHTML = months.map(month => {
+      const weeksHtml = month.weeks.map(week => {
+        const rowsHtml = week.items.map(item => {
+          const trainerNames = item.pic.split(",").map(n => n.trim());
+          const chips = trainerNames.map(name => `
+            <span class="mini-trainer-chip">
+              <span class="avatar" style="background:${hashColor(name)}">${initials(name)}</span>
+              ${name}
+            </span>
+          `).join("");
+
+          return `
+            <div class="schedule-row">
+              <div class="schedule-row-date">${item.dayName}, ${item.dateNum} ${item.monthName}</div>
+              <div class="schedule-row-body">
+                <span class="schedule-row-topic">Materi ${String(item.index).padStart(2,'0')} &middot; ${item.topic}</span>
+                <div class="schedule-row-trainers">${chips}</div>
+              </div>
+            </div>
+          `;
+        }).join("");
+
+        return `
+          <div class="week-group">
+            <p class="week-title">Minggu ${week.num}</p>
+            <div class="week-rows">${rowsHtml}</div>
+          </div>
+        `;
+      }).join("");
+
+      return `
+        <div class="month-group">
+          <p class="month-title">${month.name} 2026</p>
+          ${weeksHtml}
+        </div>
+      `;
+    }).join("");
+  }
+
+  function toggleTheme() {
+    const body = document.body;
+    const themeBtn = document.getElementById("themeToggleBtn");
+    body.classList.toggle("light-mode");
+    themeBtn.innerHTML = body.classList.contains("light-mode") ? "☀️" : "🌙";
+  }
+
+  window.onload = function () {
+    buildProgram();
+    updateSelectedDatePill();
+    checkDate();
+  };
+</script>
+
+</body>
+</html>
