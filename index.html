@@ -9,23 +9,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-base: #04060a;
-    --glass-card: rgba(255, 255, 255, 0.05);
-    --glass-card-hover: rgba(255, 255, 255, 0.09);
+    --bg-base: #06080d;
+    --glass-card: rgba(255, 255, 255, 0.04);
+    --glass-card-hover: rgba(255, 255, 255, 0.08);
     --glass-border: rgba(255, 255, 255, 0.12);
-    --glass-border-strong: rgba(255, 255, 255, 0.25);
-    --glass-highlight: rgba(255, 255, 255, 0.2);
+    --glass-border-strong: rgba(255, 255, 255, 0.22);
+    --glass-highlight: rgba(255, 255, 255, 0.18);
     --text-main: #f8fafc;
     --text-sub: #94a3b8;
     --text-muted: #64748b;
     --accent: #0a84ff;
-    --accent-glow: rgba(10, 132, 255, 0.4);
-    --accent-soft: rgba(10, 132, 255, 0.16);
-    --accent-border: rgba(10, 132, 255, 0.45);
+    --accent-glow: rgba(10, 132, 255, 0.35);
+    --accent-soft: rgba(10, 132, 255, 0.15);
+    --accent-border: rgba(10, 132, 255, 0.4);
     --danger: #ff453a;
-    --danger-soft: rgba(255, 69, 58, 0.16);
-    --radius-xl: 28px;
-    --radius-lg: 20px;
+    --danger-soft: rgba(255, 69, 58, 0.15);
+    --radius-xl: 26px;
+    --radius-lg: 18px;
     --radius-md: 14px;
     --radius-sm: 10px;
     --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -34,16 +34,16 @@
 
   body.light-mode {
     --bg-base: #eaf0f8;
-    --glass-card: rgba(255, 255, 255, 0.7);
-    --glass-card-hover: rgba(255, 255, 255, 0.9);
+    --glass-card: rgba(255, 255, 255, 0.55);
+    --glass-card-hover: rgba(255, 255, 255, 0.75);
     --glass-border: rgba(255, 255, 255, 0.8);
     --glass-border-strong: rgba(0, 0, 0, 0.15);
-    --glass-highlight: rgba(255, 255, 255, 0.95);
+    --glass-highlight: rgba(255, 255, 255, 0.9);
     --text-main: #0f172a;
     --text-sub: #475569;
     --text-muted: #64748b;
     --accent: #0066cc;
-    --accent-glow: rgba(0, 102, 204, 0.22);
+    --accent-glow: rgba(0, 102, 204, 0.2);
     --accent-soft: rgba(0, 102, 204, 0.12);
   }
 
@@ -62,56 +62,35 @@
     transition: background 0.4s ease, color 0.4s ease;
   }
 
-  /* Tonkotsuboy Particle Background Layer */
+  /* Latar Belakang Rata (Tanpa Lampu Biru/Merah) */
   #particles-bg {
     position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
-    background: radial-gradient(circle at center, transparent 0%, rgba(4, 6, 10, 0.85) 100%);
+    background: radial-gradient(circle at center, rgba(15, 20, 32, 0.8) 0%, rgba(6, 8, 13, 1) 100%);
   }
   body.light-mode #particles-bg {
-    background: radial-gradient(circle at center, transparent 0%, rgba(220, 230, 245, 0.85) 100%);
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.9) 0%, rgba(225, 235, 248, 1) 100%);
   }
 
   .particle {
     position: absolute;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(10,132,255,0.4));
-    box-shadow: 0 0 10px rgba(10, 132, 255, 0.6);
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
     animation: particleFloat var(--duration) ease-in-out infinite;
     animation-delay: var(--delay);
     opacity: 0;
   }
 
   @keyframes particleFloat {
-    0% {
-      transform: translateY(0) translateX(0) scale(0.8);
-      opacity: 0;
-    }
-    20% {
-      opacity: var(--p-opacity, 0.7);
-    }
-    80% {
-      opacity: var(--p-opacity, 0.7);
-    }
-    100% {
-      transform: translateY(-110vh) translateX(50px) scale(1.2);
-      opacity: 0;
-    }
+    0% { transform: translateY(0) translateX(0) scale(0.8); opacity: 0; }
+    20% { opacity: var(--p-opacity, 0.5); }
+    80% { opacity: var(--p-opacity, 0.5); }
+    100% { transform: translateY(-110vh) translateX(40px) scale(1.1); opacity: 0; }
   }
-
-  .glow-orb {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(130px);
-    z-index: 0;
-    pointer-events: none !important;
-    opacity: 0.4;
-  }
-  .orb-1 { top: -120px; left: -100px; width: 400px; height: 400px; background: #0a84ff; }
-  .orb-2 { bottom: -120px; right: -100px; width: 420px; height: 420px; background: #bf5af2; }
 
   .wrap { max-width: 680px; margin: 0 auto; position: relative; z-index: 1; }
 
@@ -132,11 +111,11 @@
     gap: 6px;
     margin-bottom: 8px;
     backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     box-shadow: inset 0 1px 1px var(--glass-highlight);
   }
   .brand-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
 
-  /* Title row with inline theme button */
   .title-row {
     display: flex;
     align-items: center;
@@ -156,15 +135,15 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(24px) saturate(190%);
-    -webkit-backdrop-filter: blur(24px) saturate(190%);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.25), inset 0 1px 1px var(--glass-highlight);
-    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s ease;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2), inset 0 1px 1px var(--glass-highlight);
+    transition: transform 0.2s ease;
     flex-shrink: 0;
   }
   .theme-btn:active { transform: scale(0.90) rotate(-12deg); }
 
-  /* Sticky Glass Segmented Nav Control */
+  /* Navigasi Tab Segmented Glass */
   .nav-sticky-container {
     position: sticky;
     top: 14px;
@@ -173,19 +152,19 @@
   }
   .segmented-nav {
     display: flex;
-    background: rgba(12, 16, 26, 0.65);
+    background: rgba(10, 14, 24, 0.55);
     border: 1px solid var(--glass-border-strong);
     padding: 5px;
     border-radius: 20px;
-    backdrop-filter: blur(32px) saturate(210%);
-    -webkit-backdrop-filter: blur(32px) saturate(210%);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(28px) saturate(190%);
+    -webkit-backdrop-filter: blur(28px) saturate(190%);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.2);
     overflow-x: auto;
     scrollbar-width: none;
   }
   body.light-mode .segmented-nav {
-    background: rgba(255, 255, 255, 0.75);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.1), inset 0 1px 1px rgba(255,255,255,0.9);
+    background: rgba(255, 255, 255, 0.65);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08), inset 0 1px 1px rgba(255,255,255,0.9);
   }
   .segmented-nav::-webkit-scrollbar { display: none; }
 
@@ -200,7 +179,7 @@
     cursor: pointer;
     text-align: center;
     white-space: nowrap;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.22s ease;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -210,20 +189,19 @@
   .nav-btn.active {
     color: #ffffff;
     background: var(--accent);
-    box-shadow: 0 6px 20px var(--accent-glow), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+    box-shadow: 0 6px 18px var(--accent-glow), inset 0 1px 1px rgba(255, 255, 255, 0.3);
   }
 
-  /* Glass Cards */
+  /* Transparent Glass Cards Outer */
   .glass-card {
     background: var(--glass-card);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-xl);
     padding: 22px;
-    backdrop-filter: blur(28px) saturate(190%);
-    -webkit-backdrop-filter: blur(28px) saturate(190%);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3), inset 0 1px 1px var(--glass-highlight);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25), inset 0 1px 1px var(--glass-highlight);
     margin-bottom: 22px;
-    transition: border-color 0.3s ease, transform 0.3s ease;
   }
   .card-title {
     font-size: 0.98rem;
@@ -236,8 +214,8 @@
   }
 
   .tab-pane { display: none; }
-  .tab-pane.active { display: block; animation: glassFade 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-  @keyframes glassFade { from { opacity: 0; transform: translateY(8px) scale(0.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .tab-pane.active { display: block; animation: glassFade 0.25s ease; }
+  @keyframes glassFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
   .btn {
     min-height: 48px;
@@ -250,7 +228,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.2s ease;
   }
   .btn:active { transform: scale(0.97); }
   .btn-primary {
@@ -260,33 +238,35 @@
     width: 100%;
   }
   .btn-ios-trigger {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.04);
     border: 1px solid var(--glass-border-strong);
     color: var(--text-main);
     width: 100%;
     justify-content: space-between;
     padding: 0 18px;
     backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     box-shadow: inset 0 1px 1px var(--glass-highlight);
   }
 
-  /* Schedule Item Cards - TANPA GARIS BIRU DI SEBELAH KIRI */
+  /* Kapsul Transparan Glassmorphic (Tanpa Kolom Warna) */
   .schedule-list { display: flex; flex-direction: column; gap: 12px; }
   .schedule-item {
-    background: var(--glass-card);
+    background: rgba(255, 255, 255, 0.035);
     border: 1px solid var(--glass-border);
-    /* Garis biru sebelah kiri telah dihapus */
     border-radius: var(--radius-lg);
     padding: 16px 18px;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), inset 0 1px 1px var(--glass-highlight);
-    transition: all 0.25s ease;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15), inset 0 1px 1px var(--glass-highlight);
+    transition: all 0.22s ease;
+  }
+  body.light-mode .schedule-item {
+    background: rgba(255, 255, 255, 0.55);
   }
   .schedule-item:hover {
     border-color: var(--glass-border-strong);
-    background: var(--glass-card-hover);
-    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.06);
   }
   .schedule-item-date {
     font-family: var(--font-mono);
@@ -296,17 +276,20 @@
   }
   .schedule-item-topic { font-weight: 800; font-size: 0.98rem; margin-bottom: 10px; display: block; letter-spacing: -0.01em; }
   .trainer-chips-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+  
+  /* Pill Trainer Glass */
   .trainer-chip-sm {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.06);
     border: 1px solid var(--glass-border);
     padding: 5px 12px 5px 5px;
     border-radius: 20px;
     font-size: 0.76rem;
     font-weight: 600;
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     box-shadow: inset 0 1px 0 var(--glass-highlight);
   }
 
@@ -323,13 +306,14 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
   }
 
+  /* Link Cards Glass */
   .link-grid { display: flex; flex-direction: column; gap: 12px; }
   .link-card {
     display: flex;
     align-items: center;
     gap: 14px;
     padding: 16px 18px;
-    background: var(--glass-card);
+    background: rgba(255, 255, 255, 0.035);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
     color: var(--text-main);
@@ -338,10 +322,10 @@
     font-size: 0.9rem;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), inset 0 1px 1px var(--glass-highlight);
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15), inset 0 1px 1px var(--glass-highlight);
+    transition: all 0.22s ease;
   }
-  .link-card:active { transform: scale(0.98); background: var(--glass-card-hover); }
+  .link-card:active { transform: scale(0.98); background: rgba(255, 255, 255, 0.07); }
   .link-icon {
     width: 40px;
     height: 40px;
@@ -356,7 +340,7 @@
     box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3);
   }
 
-  /* iOS Bottom Sheet Modal */
+  /* Modal iOS Sheet Glass */
   .ios-modal-overlay {
     position: fixed;
     inset: 0;
@@ -378,7 +362,7 @@
   .ios-sheet {
     width: 100%;
     max-width: 500px;
-    background: rgba(24, 28, 42, 0.88);
+    background: rgba(20, 24, 36, 0.88);
     border-top-left-radius: 32px;
     border-top-right-radius: 32px;
     border-top: 1px solid var(--glass-border-strong);
@@ -387,7 +371,7 @@
     backdrop-filter: blur(35px) saturate(210%);
     -webkit-backdrop-filter: blur(35px) saturate(210%);
     transform: translateY(100%);
-    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     box-sizing: border-box;
   }
   body.light-mode .ios-sheet {
@@ -436,7 +420,7 @@
   }
 
   .ios-grouped-list {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.04);
     border-radius: 20px;
     border: 1px solid var(--glass-border);
     overflow: hidden;
@@ -472,7 +456,7 @@
   .ios-chevron { color: var(--text-muted); font-size: 0.95rem; font-weight: 800; }
 
   .ios-date-picker-box {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.04);
     border-radius: 20px;
     padding: 18px;
     border: 1px solid var(--glass-border);
@@ -523,11 +507,8 @@
 </head>
 <body>
 
-<!-- Animated Particle Background Layer -->
+<!-- Particle Background Canvas -->
 <div id="particles-bg"></div>
-
-<div class="glow-orb orb-1"></div>
-<div class="glow-orb orb-2"></div>
 
 <div class="wrap">
   <div class="header">
@@ -719,18 +700,18 @@
 
   function initParticleBackground() {
     const container = document.getElementById("particles-bg");
-    const count = 30;
+    const count = 28;
     for (let i = 0; i < count; i++) {
       const p = document.createElement("div");
       p.className = "particle";
-      const size = Math.random() * 4 + 2;
+      const size = Math.random() * 3 + 2;
       p.style.width = `${size}px`;
       p.style.height = `${size}px`;
       p.style.left = `${Math.random() * 100}%`;
       p.style.top = `${Math.random() * 100}%`;
       p.style.setProperty("--duration", `${Math.random() * 14 + 10}s`);
       p.style.setProperty("--delay", `${Math.random() * 8}s`);
-      p.style.setProperty("--p-opacity", `${Math.random() * 0.6 + 0.3}`);
+      p.style.setProperty("--p-opacity", `${Math.random() * 0.5 + 0.2}`);
       container.appendChild(p);
     }
   }
