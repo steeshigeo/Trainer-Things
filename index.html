@@ -9,22 +9,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-base: #08090e;
-    --glass-card: rgba(22, 26, 38, 0.7);
-    --glass-card-hover: rgba(30, 36, 52, 0.85);
-    --glass-border: rgba(255, 255, 255, 0.12);
-    --glass-border-strong: rgba(255, 255, 255, 0.2);
+    --bg-base: #030408;
+    --glass-card: rgba(255, 255, 255, 0.05);
+    --glass-card-hover: rgba(255, 255, 255, 0.09);
+    --glass-card-active: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.14);
+    --glass-border-strong: rgba(255, 255, 255, 0.28);
+    --glass-highlight: rgba(255, 255, 255, 0.22);
     --text-main: #f8fafc;
     --text-sub: #94a3b8;
     --text-muted: #64748b;
     --accent: #0a84ff;
-    --accent-glow: rgba(10, 132, 255, 0.35);
-    --accent-soft: rgba(10, 132, 255, 0.15);
-    --accent-border: rgba(10, 132, 255, 0.4);
+    --accent-glow: rgba(10, 132, 255, 0.45);
+    --accent-soft: rgba(10, 132, 255, 0.18);
+    --accent-border: rgba(10, 132, 255, 0.5);
     --danger: #ff453a;
-    --danger-soft: rgba(255, 69, 58, 0.15);
-    --radius-xl: 24px;
-    --radius-lg: 18px;
+    --danger-soft: rgba(255, 69, 58, 0.18);
+    --radius-xl: 28px;
+    --radius-lg: 20px;
     --radius-md: 14px;
     --radius-sm: 10px;
     --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -32,17 +34,19 @@
   }
 
   body.light-mode {
-    --bg-base: #f1f5f9;
-    --glass-card: rgba(255, 255, 255, 0.85);
-    --glass-card-hover: rgba(255, 255, 255, 0.95);
-    --glass-border: rgba(0, 0, 0, 0.08);
-    --glass-border-strong: rgba(0, 0, 0, 0.16);
+    --bg-base: #eaf0f8;
+    --glass-card: rgba(255, 255, 255, 0.65);
+    --glass-card-hover: rgba(255, 255, 255, 0.85);
+    --glass-card-active: rgba(255, 255, 255, 0.95);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --glass-border-strong: rgba(0, 0, 0, 0.15);
+    --glass-highlight: rgba(255, 255, 255, 0.9);
     --text-main: #0f172a;
     --text-sub: #475569;
     --text-muted: #64748b;
     --accent: #0066cc;
-    --accent-glow: rgba(0, 102, 204, 0.2);
-    --accent-soft: rgba(0, 102, 204, 0.1);
+    --accent-glow: rgba(0, 102, 204, 0.25);
+    --accent-soft: rgba(0, 102, 204, 0.12);
   }
 
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -54,132 +58,156 @@
     background: var(--bg-base);
     color: var(--text-main);
     min-height: 100vh;
-    padding: 20px 16px 60px;
+    padding: 24px 16px 70px;
     position: relative;
     overflow-x: hidden;
+    transition: background 0.4s ease, color 0.4s ease;
   }
 
+  /* Liquid Glass Animated Orbs */
   .glow-orb {
     position: fixed;
     border-radius: 50%;
-    filter: blur(120px);
+    filter: blur(130px);
     z-index: 0;
     pointer-events: none !important;
-    opacity: 0.35;
+    opacity: 0.45;
+    animation: liquidDrift 22s ease-in-out infinite alternate;
   }
-  .orb-1 { top: -100px; left: -100px; width: 350px; height: 350px; background: #0a84ff; }
-  .orb-2 { bottom: -100px; right: -100px; width: 350px; height: 350px; background: #bf5af2; }
+  .orb-1 { top: -120px; left: -100px; width: 400px; height: 400px; background: radial-gradient(circle, #0a84ff, transparent 70%); }
+  .orb-2 { bottom: -120px; right: -100px; width: 420px; height: 420px; background: radial-gradient(circle, #bf5af2, transparent 70%); }
+  .orb-3 { top: 45%; left: 50%; transform: translate(-50%, -50%); width: 350px; height: 350px; background: radial-gradient(circle, #ff2d55, transparent 70%); opacity: 0.25; }
+
+  @keyframes liquidDrift {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(35px, -25px) scale(1.08); }
+    100% { transform: translate(-25px, 35px) scale(0.95); }
+  }
 
   .wrap { max-width: 680px; margin: 0 auto; position: relative; z-index: 1; }
 
-  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  /* Header */
+  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
   .brand-badge {
     font-family: var(--font-mono);
     font-size: 0.7rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     color: var(--accent);
     background: var(--accent-soft);
     border: 1px solid var(--accent-border);
-    padding: 4px 10px;
-    border-radius: 20px;
-    display: inline-block;
-    margin-bottom: 6px;
+    padding: 5px 12px;
+    border-radius: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+    backdrop-filter: blur(16px);
+    box-shadow: inset 0 1px 1px var(--glass-highlight);
   }
-  h1 { font-size: clamp(1.5rem, 5vw, 1.9rem); font-weight: 800; margin: 0; letter-spacing: -0.02em; }
+  .brand-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+  h1 { font-size: clamp(1.55rem, 5vw, 1.95rem); font-weight: 800; margin: 0; letter-spacing: -0.03em; }
 
   .theme-btn {
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
     background: var(--glass-card);
     border: 1px solid var(--glass-border);
     color: var(--text-main);
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(16px);
-    transition: transform 0.2s ease;
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25), inset 0 1px 1px var(--glass-highlight);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
   }
-  .theme-btn:active { transform: scale(0.92); }
+  .theme-btn:active { transform: scale(0.90) rotate(-12deg); }
 
+  /* Sticky Glass Segmented Nav Control */
   .nav-sticky-container {
     position: sticky;
-    top: 12px;
+    top: 14px;
     z-index: 50;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
   }
   .segmented-nav {
     display: flex;
-    background: rgba(15, 20, 32, 0.85);
+    background: rgba(12, 16, 26, 0.65);
     border: 1px solid var(--glass-border-strong);
-    padding: 4px;
-    border-radius: 16px;
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    padding: 5px;
+    border-radius: 20px;
+    backdrop-filter: blur(32px) saturate(210%);
+    -webkit-backdrop-filter: blur(32px) saturate(210%);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.25);
     overflow-x: auto;
     scrollbar-width: none;
   }
   body.light-mode .segmented-nav {
-    background: rgba(255, 255, 255, 0.85);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    background: rgba(255, 255, 255, 0.75);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1), inset 0 1px 1px rgba(255,255,255,0.9);
   }
   .segmented-nav::-webkit-scrollbar { display: none; }
 
   .nav-btn {
     flex: 1;
     min-width: max-content;
-    padding: 10px 14px;
-    border-radius: 12px;
+    padding: 10px 15px;
+    border-radius: 15px;
     font-size: 0.82rem;
     font-weight: 700;
     color: var(--text-sub);
     cursor: pointer;
     text-align: center;
     white-space: nowrap;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
   }
-  .nav-btn:active { transform: scale(0.96); }
+  .nav-btn:active { transform: scale(0.95); }
   .nav-btn.active {
     color: #ffffff;
     background: var(--accent);
-    box-shadow: 0 4px 14px var(--accent-glow);
+    box-shadow: 0 6px 20px var(--accent-glow), inset 0 1px 1px rgba(255, 255, 255, 0.35);
   }
 
+  /* Glass Cards */
   .glass-card {
     background: var(--glass-card);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-xl);
-    padding: 20px;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
-    margin-bottom: 20px;
+    padding: 22px;
+    backdrop-filter: blur(28px) saturate(190%);
+    -webkit-backdrop-filter: blur(28px) saturate(190%);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3), inset 0 1px 1px var(--glass-highlight);
+    margin-bottom: 22px;
+    transition: border-color 0.3s ease, transform 0.3s ease;
   }
   .card-title {
-    font-size: 0.95rem;
+    font-size: 0.98rem;
     font-weight: 800;
-    margin: 0 0 16px;
+    margin: 0 0 18px;
     display: flex;
     align-items: center;
     gap: 8px;
+    letter-spacing: -0.01em;
   }
 
+  /* Tab View Logic */
   .tab-pane { display: none; }
-  .tab-pane.active { display: block; animation: fadeIn 0.25s ease; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .tab-pane.active { display: block; animation: glassFade 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+  @keyframes glassFade { from { opacity: 0; transform: translateY(8px) scale(0.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
+  /* Interactive Glass Buttons */
   .btn {
-    min-height: 46px;
-    padding: 0 18px;
-    border-radius: 14px;
+    min-height: 48px;
+    padding: 0 20px;
+    border-radius: 16px;
     cursor: pointer;
     font-weight: 700;
     font-size: 0.88rem;
@@ -187,45 +215,65 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: all 0.2s ease;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .btn:active { transform: scale(0.97); }
-  .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 16px var(--accent-glow); width: 100%; }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 8px 24px var(--accent-glow), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+    width: 100%;
+  }
   .btn-ios-trigger {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--glass-border-strong);
     color: var(--text-main);
     width: 100%;
     justify-content: space-between;
-    padding: 0 16px;
+    padding: 0 18px;
+    backdrop-filter: blur(16px);
+    box-shadow: inset 0 1px 1px var(--glass-highlight);
   }
+  .btn-ios-trigger:active { background: var(--glass-card-hover); }
 
-  .schedule-list { display: flex; flex-direction: column; gap: 10px; }
+  /* Schedule Item Cards */
+  .schedule-list { display: flex; flex-direction: column; gap: 12px; }
   .schedule-item {
     background: var(--glass-card);
     border: 1px solid var(--glass-border);
     border-left: 4px solid var(--accent);
     border-radius: var(--radius-lg);
-    padding: 14px 16px;
+    padding: 16px 18px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), inset 0 1px 1px var(--glass-highlight);
+    transition: all 0.25s ease;
+  }
+  .schedule-item:hover {
+    border-color: var(--glass-border-strong);
+    background: var(--glass-card-hover);
+    transform: translateY(-2px);
   }
   .schedule-item-date {
     font-family: var(--font-mono);
     font-size: 0.72rem;
     color: var(--text-muted);
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
-  .schedule-item-topic { font-weight: 800; font-size: 0.95rem; margin-bottom: 8px; display: block; }
+  .schedule-item-topic { font-weight: 800; font-size: 0.98rem; margin-bottom: 10px; display: block; letter-spacing: -0.01em; }
   .trainer-chips-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
   .trainer-chip-sm {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(255,255,255,0.06);
+    background: rgba(255, 255, 255, 0.07);
     border: 1px solid var(--glass-border);
-    padding: 4px 10px 4px 4px;
+    padding: 5px 12px 5px 5px;
     border-radius: 20px;
-    font-size: 0.75rem;
+    font-size: 0.76rem;
     font-weight: 600;
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 1px 0 var(--glass-highlight);
   }
 
   .avatar-mini {
@@ -238,43 +286,50 @@
     font-size: 0.6rem;
     font-weight: 800;
     color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
   }
 
-  .link-grid { display: flex; flex-direction: column; gap: 10px; }
+  /* Link Grid Cards */
+  .link-grid { display: flex; flex-direction: column; gap: 12px; }
   .link-card {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
+    gap: 14px;
+    padding: 16px 18px;
     background: var(--glass-card);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
     color: var(--text-main);
     text-decoration: none;
     font-weight: 700;
-    font-size: 0.88rem;
-    transition: background 0.2s ease, transform 0.2s ease;
+    font-size: 0.9rem;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), inset 0 1px 1px var(--glass-highlight);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .link-card:active { transform: scale(0.98); background: var(--glass-card-hover); }
   .link-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
     background: var(--accent-soft);
     border: 1px solid var(--accent-border);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     flex-shrink: 0;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3);
   }
 
+  /* iOS 27 Glass Bottom Sheet Modal */
   .ios-modal-overlay {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     display: none;
     align-items: flex-end;
     justify-content: center;
@@ -290,72 +345,75 @@
   .ios-sheet {
     width: 100%;
     max-width: 500px;
-    background: #1c1c1e;
-    border-top-left-radius: 28px;
-    border-top-right-radius: 28px;
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
-    padding: 12px 20px 36px;
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
+    background: rgba(24, 28, 42, 0.85);
+    border-top-left-radius: 32px;
+    border-top-right-radius: 32px;
+    border-top: 1px solid var(--glass-border-strong);
+    padding: 14px 20px 38px;
+    box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.7), inset 0 1px 1px var(--glass-highlight);
+    backdrop-filter: blur(35px) saturate(210%);
+    -webkit-backdrop-filter: blur(35px) saturate(210%);
     transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
     box-sizing: border-box;
   }
   body.light-mode .ios-sheet {
-    background: #f2f2f7;
-    border-top-color: rgba(0, 0, 0, 0.12);
+    background: rgba(242, 242, 247, 0.92);
+    border-top-color: rgba(255, 255, 255, 0.9);
   }
   .ios-modal-overlay.open .ios-sheet {
     transform: translateY(0);
   }
 
   .ios-grab-handle {
-    width: 36px;
+    width: 38px;
     height: 5px;
     border-radius: 3px;
     background: rgba(255, 255, 255, 0.3);
-    margin: 0 auto 14px;
+    margin: 0 auto 16px;
   }
-  body.light-mode .ios-grab-handle { background: rgba(0, 0, 0, 0.2); }
+  body.light-mode .ios-grab-handle { background: rgba(0, 0, 0, 0.25); }
 
   .ios-sheet-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding-bottom: 14px;
-    border-bottom: 0.5px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 0.5px solid var(--glass-border);
     margin-bottom: 16px;
   }
-  body.light-mode .ios-sheet-header { border-bottom-color: rgba(0, 0, 0, 0.1); }
 
   .ios-sheet-title {
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 800;
     margin: 0;
     color: var(--text-main);
   }
   .ios-sheet-btn-cancel {
     color: var(--text-sub);
     font-size: 0.9rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
   }
   .ios-sheet-btn-done {
     color: var(--accent);
     font-size: 0.9rem;
-    font-weight: 700;
+    font-weight: 800;
     cursor: pointer;
   }
 
+  /* iOS Grouped List */
   .ios-grouped-list {
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
-    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
     overflow: hidden;
     max-height: 320px;
     overflow-y: auto;
+    box-shadow: inset 0 1px 1px var(--glass-highlight);
   }
   body.light-mode .ios-grouped-list {
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.8);
     border-color: rgba(0, 0, 0, 0.08);
   }
 
@@ -363,70 +421,80 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 16px;
-    border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+    padding: 13px 18px;
+    border-bottom: 0.5px solid var(--glass-border);
     cursor: pointer;
     transition: background 0.15s ease;
   }
-  body.light-mode .ios-list-row { border-bottom-color: rgba(0, 0, 0, 0.06); }
   .ios-list-row:last-child { border-bottom: none; }
-  .ios-list-row:active { background: rgba(10, 132, 255, 0.15); }
+  .ios-list-row:active { background: var(--accent-soft); }
 
   .ios-list-left {
     display: flex;
     align-items: center;
     gap: 12px;
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text-main);
   }
-  .ios-chevron { color: var(--text-muted); font-size: 0.9rem; font-weight: 700; }
+  .ios-chevron { color: var(--text-muted); font-size: 0.95rem; font-weight: 800; }
 
+  /* Glass Date Picker Box */
   .ios-date-picker-box {
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
-    padding: 16px;
-    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 18px;
+    border: 1px solid var(--glass-border);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     width: 100%;
     box-sizing: border-box;
+    box-shadow: inset 0 1px 1px var(--glass-highlight);
   }
-  body.light-mode .ios-date-picker-box { background: #ffffff; border-color: rgba(0,0,0,0.08); }
+  body.light-mode .ios-date-picker-box { background: rgba(255, 255, 255, 0.8); }
 
   .ios-date-input {
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
-    height: 48px;
-    padding: 0 12px;
-    border-radius: 12px;
+    height: 50px;
+    padding: 0 14px;
+    border-radius: 14px;
     border: 1px solid var(--accent-border);
     background: var(--accent-soft);
     color: var(--text-main);
     font-family: inherit;
-    font-size: 0.95rem;
-    font-weight: 700;
+    font-size: 0.98rem;
+    font-weight: 800;
     outline: none;
     text-align: center;
     -webkit-appearance: none;
     appearance: none;
     display: block;
     margin: 0;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25);
   }
   .ios-date-input::-webkit-date-and-time-value {
     text-align: center;
     margin: 0;
   }
 
-  footer { text-align: center; color: var(--text-muted); font-size: 0.75rem; font-family: var(--font-mono); margin-top: 30px; }
+  footer {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    margin-top: 36px;
+    letter-spacing: 0.02em;
+  }
 </style>
 </head>
 <body>
 
 <div class="glow-orb orb-1"></div>
 <div class="glow-orb orb-2"></div>
+<div class="glow-orb orb-3"></div>
 
 <div class="wrap">
   <div class="header">
@@ -460,9 +528,9 @@
         <span>📅 Pilih Tanggal Target</span>
         <span class="ios-chevron">›</span>
       </button>
-      <div id="selectedDatePill" style="display:none; margin-top:12px; font-weight:700; color:var(--accent); font-size:0.88rem;"></div>
-      <button class="btn btn-primary" id="checkDateBtn" onclick="executeDateCheck()" style="display:none; margin-top:12px;">Cek Jadwal Tanggal Ini</button>
-      <div id="dateResultContainer" style="margin-top:12px;"></div>
+      <div id="selectedDatePill" style="display:none; margin-top:14px; font-weight:700; color:var(--accent); font-size:0.88rem;"></div>
+      <button class="btn btn-primary" id="checkDateBtn" onclick="executeDateCheck()" style="display:none; margin-top:14px;">Cek Jadwal Tanggal Ini</button>
+      <div id="dateResultContainer" style="margin-top:14px;"></div>
     </div>
 
     <div class="glass-card">
@@ -471,9 +539,9 @@
         <span>👨‍🏫 Pilih Trainer</span>
         <span class="ios-chevron">›</span>
       </button>
-      <div id="selectedTrainerPill" style="display:none; margin-top:12px; font-weight:700; color:var(--accent); font-size:0.88rem;"></div>
-      <button class="btn btn-primary" id="checkTrainerBtn" onclick="executeTrainerCheck()" style="display:none; margin-top:12px;">Cek Jadwal Trainer Ini</button>
-      <div id="trainerResultContainer" style="margin-top:12px;"></div>
+      <div id="selectedTrainerPill" style="display:none; margin-top:14px; font-weight:700; color:var(--accent); font-size:0.88rem;"></div>
+      <button class="btn btn-primary" id="checkTrainerBtn" onclick="executeTrainerCheck()" style="display:none; margin-top:14px;">Cek Jadwal Trainer Ini</button>
+      <div id="trainerResultContainer" style="margin-top:14px;"></div>
     </div>
   </div>
 
@@ -529,6 +597,7 @@
   <footer>Digimap Trainer Onboarding System | All Right Reserved @frans</footer>
 </div>
 
+<!-- iOS Cupertino Date Picker Sheet -->
 <div class="ios-modal-overlay" id="dateModal" onclick="closeModalOnOverlay(event, 'dateModal')">
   <div class="ios-sheet">
     <div class="ios-grab-handle"></div>
@@ -544,6 +613,7 @@
   </div>
 </div>
 
+<!-- iOS Cupertino Trainer Picker Sheet -->
 <div class="ios-modal-overlay" id="trainerModal" onclick="closeModalOnOverlay(event, 'trainerModal')">
   <div class="ios-sheet">
     <div class="ios-grab-handle"></div>
