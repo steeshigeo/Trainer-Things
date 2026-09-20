@@ -33,7 +33,7 @@
 
   body.light-mode {
     --bg-base: #f1f5f9;
-    --glass-card: rgba(255, 255, 255, 0.8);
+    --glass-card: rgba(255, 255, 255, 0.85);
     --glass-card-hover: rgba(255, 255, 255, 0.95);
     --glass-border: rgba(0, 0, 0, 0.08);
     --glass-border-strong: rgba(0, 0, 0, 0.16);
@@ -59,14 +59,14 @@
     overflow-x: hidden;
   }
 
-  /* Ambient Glow Backgrounds */
+  /* Ambient Background Glow */
   .glow-orb {
     position: fixed;
     border-radius: 50%;
     filter: blur(120px);
     z-index: 0;
     pointer-events: none !important;
-    opacity: 0.4;
+    opacity: 0.35;
   }
   .orb-1 { top: -100px; left: -100px; width: 350px; height: 350px; background: #0a84ff; }
   .orb-2 { bottom: -100px; right: -100px; width: 350px; height: 350px; background: #bf5af2; }
@@ -176,18 +176,6 @@
     gap: 8px;
   }
 
-  /* Stats Grid */
-  .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
-  .stat-box {
-    background: var(--glass-card);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    padding: 14px;
-    text-align: center;
-  }
-  .stat-val { font-family: var(--font-mono); font-weight: 700; font-size: 1.3rem; color: var(--accent); display: block; }
-  .stat-lbl { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-top: 2px; display: block; letter-spacing: 0.05em; }
-
   /* Tab View Logic */
   .tab-pane { display: none; }
   .tab-pane.active { display: block; animation: fadeIn 0.25s ease; }
@@ -195,12 +183,12 @@
 
   /* Interactive Buttons */
   .btn {
-    min-height: 44px;
+    min-height: 46px;
     padding: 0 18px;
-    border-radius: 12px;
+    border-radius: 14px;
     cursor: pointer;
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.88rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -209,7 +197,14 @@
   }
   .btn:active { transform: scale(0.97); }
   .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 16px var(--accent-glow); width: 100%; }
-  .btn-outline { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border-strong); color: var(--text-main); width: 100%; }
+  .btn-ios-trigger {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--glass-border-strong);
+    color: var(--text-main);
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 16px;
+  }
 
   /* Schedule List */
   .schedule-list { display: flex; flex-direction: column; gap: 10px; }
@@ -282,46 +277,146 @@
     flex-shrink: 0;
   }
 
-  /* Modals */
-  .modal-overlay {
+  /* iOS Cupertino Bottom Sheet Modal */
+  .ios-modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     display: none;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
-    z-index: 100;
-    padding: 20px;
+    z-index: 200;
+    opacity: 0;
+    transition: opacity 0.25s ease;
   }
-  .modal-overlay.open { display: flex; }
-  .modal-box {
-    width: 100%;
-    max-width: 400px;
-    background: #111522;
-    border: 1px solid var(--glass-border-strong);
-    border-radius: var(--radius-xl);
-    padding: 20px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-  }
-  body.light-mode .modal-box { background: #ffffff; }
-  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-  .modal-title { font-weight: 800; font-size: 1rem; margin: 0; }
-  .modal-close {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: rgba(255,255,255,0.1); color: var(--text-main);
-    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  .ios-modal-overlay.open {
+    display: flex;
+    opacity: 1;
   }
 
-  .trainer-select-grid { display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow-y: auto; }
-  .trainer-option-btn {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px; border-radius: 12px;
-    background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border);
-    color: var(--text-main); text-align: left; cursor: pointer; font-weight: 600; font-size: 0.85rem;
+  .ios-sheet {
+    width: 100%;
+    max-width: 500px;
+    background: #1c1c1e;
+    border-top-left-radius: 28px;
+    border-top-right-radius: 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 12px 20px 36px;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .trainer-option-btn:active { background: var(--accent-soft); border-color: var(--accent-border); }
+  body.light-mode .ios-sheet {
+    background: #f2f2f7;
+    border-top-color: rgba(0, 0, 0, 0.12);
+  }
+  .ios-modal-overlay.open .ios-sheet {
+    transform: translateY(0);
+  }
+
+  .ios-grab-handle {
+    width: 36px;
+    height: 5px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.3);
+    margin: 0 auto 14px;
+  }
+  body.light-mode .ios-grab-handle { background: rgba(0, 0, 0, 0.2); }
+
+  .ios-sheet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.12);
+    margin-bottom: 16px;
+  }
+  body.light-mode .ios-sheet-header { border-bottom-color: rgba(0, 0, 0, 0.1); }
+
+  .ios-sheet-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-main);
+  }
+  .ios-sheet-btn-cancel {
+    color: var(--text-sub);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .ios-sheet-btn-done {
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* iOS Grouped List */
+  .ios-grouped-list {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    max-height: 320px;
+    overflow-y: auto;
+  }
+  body.light-mode .ios-grouped-list {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .ios-list-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  body.light-mode .ios-list-row { border-bottom-color: rgba(0, 0, 0, 0.06); }
+  .ios-list-row:last-child { border-bottom: none; }
+  .ios-list-row:active { background: rgba(10, 132, 255, 0.15); }
+
+  .ios-list-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+  }
+  .ios-chevron { color: var(--text-muted); font-size: 0.9rem; font-weight: 700; }
+
+  /* iOS Styled Date Picker Box */
+  .ios-date-picker-box {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 16px;
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  body.light-mode .ios-date-picker-box { background: #ffffff; border-color: rgba(0,0,0,0.08); }
+
+  .ios-date-input {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    border-radius: 12px;
+    border: 1px solid var(--accent-border);
+    background: var(--accent-soft);
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    outline: none;
+    text-align: center;
+  }
 
   footer { text-align: center; color: var(--text-muted); font-size: 0.75rem; font-family: var(--font-mono); margin-top: 30px; }
 </style>
@@ -353,11 +448,6 @@
 
   <!-- TAB 1: BATCH AKTIF -->
   <div class="tab-pane active" id="tabActive">
-    <div class="stat-grid">
-      <div class="stat-box"><span class="stat-val">21 Sept</span><span class="stat-lbl">Mulai Program</span></div>
-      <div class="stat-box"><span class="stat-val">Aktif</span><span class="stat-lbl">Status</span></div>
-    </div>
-
     <div class="glass-card">
       <h2 class="card-title">🚀 Jadwal Running (21 Sept 2026)</h2>
       <div class="schedule-list" id="activeScheduleContainer"></div>
@@ -368,16 +458,22 @@
   <div class="tab-pane" id="tabSearch">
     <div class="glass-card">
       <h2 class="card-title">🔍 Cari Berdasarkan Tanggal</h2>
-      <button type="button" class="btn btn-outline" onclick="openModal('dateModal')">📅 Pilih Tanggal</button>
-      <div id="selectedDatePill" style="display:none; margin-top:10px; font-weight:700; color:var(--accent); font-size:0.85rem;"></div>
+      <button type="button" class="btn btn-ios-trigger" onclick="openModal('dateModal')">
+        <span>📅 Pilih Tanggal Target</span>
+        <span class="ios-chevron">›</span>
+      </button>
+      <div id="selectedDatePill" style="display:none; margin-top:12px; font-weight:700; color:var(--accent); font-size:0.88rem;"></div>
       <button class="btn btn-primary" id="checkDateBtn" onclick="executeDateCheck()" style="display:none; margin-top:12px;">Cek Jadwal Tanggal Ini</button>
       <div id="dateResultContainer" style="margin-top:12px;"></div>
     </div>
 
     <div class="glass-card">
       <h2 class="card-title">👤 Cari Berdasarkan Trainer</h2>
-      <button type="button" class="btn btn-outline" onclick="openModal('trainerModal')">👨‍🏫 Pilih Trainer</button>
-      <div id="selectedTrainerPill" style="display:none; margin-top:10px; font-weight:700; color:var(--accent); font-size:0.85rem;"></div>
+      <button type="button" class="btn btn-ios-trigger" onclick="openModal('trainerModal')">
+        <span>👨‍🏫 Pilih Trainer</span>
+        <span class="ios-chevron">›</span>
+      </button>
+      <div id="selectedTrainerPill" style="display:none; margin-top:12px; font-weight:700; color:var(--accent); font-size:0.88rem;"></div>
       <button class="btn btn-primary" id="checkTrainerBtn" onclick="executeTrainerCheck()" style="display:none; margin-top:12px;">Cek Jadwal Trainer Ini</button>
       <div id="trainerResultContainer" style="margin-top:12px;"></div>
     </div>
@@ -437,26 +533,32 @@
   <footer>Digimap Trainer Onboarding System</footer>
 </div>
 
-<!-- Date Picker Modal -->
-<div class="modal-overlay" id="dateModal" onclick="closeModalOnOverlay(event, 'dateModal')">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h3 class="modal-title">Pilih Tanggal</h3>
-      <button type="button" class="modal-close" onclick="closeModal('dateModal')">✕</button>
+<!-- iOS Cupertino Date Picker Sheet -->
+<div class="ios-modal-overlay" id="dateModal" onclick="closeModalOnOverlay(event, 'dateModal')">
+  <div class="ios-sheet">
+    <div class="ios-grab-handle"></div>
+    <div class="ios-sheet-header">
+      <span class="ios-sheet-btn-cancel" onclick="closeModal('dateModal')">Batal</span>
+      <span class="ios-sheet-title">Pilih Tanggal</span>
+      <span class="ios-sheet-btn-done" onclick="confirmDateSelect()">Selesai</span>
     </div>
-    <input type="date" id="datePickerInput" value="2026-09-21" style="width:100%; height:44px; padding:0 12px; border-radius:10px; border:1px solid var(--glass-border); background:rgba(255,255,255,0.05); color:var(--text-main); margin-bottom:14px; font-family:inherit;">
-    <button type="button" class="btn btn-primary" onclick="confirmDateSelect()">Pilih Tanggal Ini</button>
+    <div class="ios-date-picker-box">
+      <label style="font-size:0.78rem; color:var(--text-muted); font-weight:600; text-align:center;">TANGGAL TARGET</label>
+      <input type="date" id="datePickerInput" class="ios-date-input" value="2026-09-21">
+    </div>
   </div>
 </div>
 
-<!-- Trainer Picker Modal -->
-<div class="modal-overlay" id="trainerModal" onclick="closeModalOnOverlay(event, 'trainerModal')">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h3 class="modal-title">Pilih Trainer</h3>
-      <button type="button" class="modal-close" onclick="closeModal('trainerModal')">✕</button>
+<!-- iOS Cupertino Trainer Picker Sheet -->
+<div class="ios-modal-overlay" id="trainerModal" onclick="closeModalOnOverlay(event, 'trainerModal')">
+  <div class="ios-sheet">
+    <div class="ios-grab-handle"></div>
+    <div class="ios-sheet-header">
+      <span class="ios-sheet-btn-cancel" onclick="closeModal('trainerModal')">Tutup</span>
+      <span class="ios-sheet-title">Pilih Trainer</span>
+      <span style="width:40px;"></span>
     </div>
-    <div class="trainer-select-grid" id="trainerListGrid"></div>
+    <div class="ios-grouped-list" id="trainerListGrid"></div>
   </div>
 </div>
 
@@ -618,8 +720,17 @@
     document.getElementById("themeBtn").innerText = document.body.classList.contains("light-mode") ? "☀️" : "🌙";
   }
 
-  function openModal(id) { document.getElementById(id).classList.add("open"); }
-  function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+  /* iOS Sheet Handlers */
+  function openModal(id) {
+    const modal = document.getElementById(id);
+    modal.style.display = "flex";
+    setTimeout(() => modal.classList.add("open"), 10);
+  }
+  function closeModal(id) {
+    const modal = document.getElementById(id);
+    modal.classList.remove("open");
+    setTimeout(() => modal.style.display = "none", 250);
+  }
   function closeModalOnOverlay(e, id) { if (e.target === e.currentTarget) closeModal(id); }
 
   function confirmDateSelect() {
@@ -659,10 +770,13 @@
     const grid = document.getElementById("trainerListGrid");
     const names = Object.keys(activeTrainerMap).sort();
     grid.innerHTML = names.map(name => `
-      <button type="button" class="trainer-option-btn" onclick="selectTrainer('${name.replace(/'/g, "\\'")}')">
-        <span class="avatar-mini" style="background:${hashColor(name)}">${initials(name)}</span>
-        ${name}
-      </button>
+      <div class="ios-list-row" onclick="selectTrainer('${name.replace(/'/g, "\\'")}')">
+        <div class="ios-list-left">
+          <span class="avatar-mini" style="background:${hashColor(name)}">${initials(name)}</span>
+          ${name}
+        </div>
+        <span class="ios-chevron">›</span>
+      </div>
     `).join("");
   }
 
