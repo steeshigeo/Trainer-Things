@@ -59,7 +59,6 @@
     overflow-x: hidden;
   }
 
-  /* Ambient Background Glow */
   .glow-orb {
     position: fixed;
     border-radius: 50%;
@@ -73,7 +72,6 @@
 
   .wrap { max-width: 680px; margin: 0 auto; position: relative; z-index: 1; }
 
-  /* Header */
   .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
   .brand-badge {
     font-family: var(--font-mono);
@@ -107,7 +105,6 @@
   }
   .theme-btn:active { transform: scale(0.92); }
 
-  /* Segmented Navigation Bar (Sticky Top) */
   .nav-sticky-container {
     position: sticky;
     top: 12px;
@@ -156,7 +153,6 @@
     box-shadow: 0 4px 14px var(--accent-glow);
   }
 
-  /* Cards & Panels */
   .glass-card {
     background: var(--glass-card);
     border: 1px solid var(--glass-border);
@@ -176,12 +172,10 @@
     gap: 8px;
   }
 
-  /* Tab View Logic */
   .tab-pane { display: none; }
   .tab-pane.active { display: block; animation: fadeIn 0.25s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* Interactive Buttons */
   .btn {
     min-height: 46px;
     padding: 0 18px;
@@ -206,7 +200,6 @@
     padding: 0 16px;
   }
 
-  /* Schedule List */
   .schedule-list { display: flex; flex-direction: column; gap: 10px; }
   .schedule-item {
     background: var(--glass-card);
@@ -247,7 +240,6 @@
     color: #fff;
   }
 
-  /* Link Grid */
   .link-grid { display: flex; flex-direction: column; gap: 10px; }
   .link-card {
     display: flex;
@@ -277,7 +269,6 @@
     flex-shrink: 0;
   }
 
-  /* iOS Cupertino Bottom Sheet Modal */
   .ios-modal-overlay {
     position: fixed;
     inset: 0;
@@ -307,6 +298,7 @@
     box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
     transform: translateY(100%);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
   }
   body.light-mode .ios-sheet {
     background: #f2f2f7;
@@ -354,7 +346,6 @@
     cursor: pointer;
   }
 
-  /* iOS Grouped List */
   .ios-grouped-list {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 16px;
@@ -391,7 +382,6 @@
   }
   .ios-chevron { color: var(--text-muted); font-size: 0.9rem; font-weight: 700; }
 
-  /* iOS Styled Date Picker Box */
   .ios-date-picker-box {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 16px;
@@ -400,22 +390,34 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
   }
   body.light-mode .ios-date-picker-box { background: #ffffff; border-color: rgba(0,0,0,0.08); }
 
   .ios-date-input {
-    width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
     height: 48px;
-    padding: 0 16px;
+    padding: 0 12px;
     border-radius: 12px;
     border: 1px solid var(--accent-border);
     background: var(--accent-soft);
     color: var(--text-main);
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 700;
     outline: none;
     text-align: center;
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
+    margin: 0;
+  }
+  .ios-date-input::-webkit-date-and-time-value {
+    text-align: center;
+    margin: 0;
   }
 
   footer { text-align: center; color: var(--text-muted); font-size: 0.75rem; font-family: var(--font-mono); margin-top: 30px; }
@@ -427,7 +429,6 @@
 <div class="glow-orb orb-2"></div>
 
 <div class="wrap">
-  <!-- Header -->
   <div class="header">
     <div>
       <span class="brand-badge">Digimap Trainer</span>
@@ -436,25 +437,22 @@
     <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Beralih Mode">🌙</button>
   </div>
 
-  <!-- Sticky Segmented Nav Control (Top Navigation) -->
   <div class="nav-sticky-container">
     <nav class="segmented-nav">
       <button class="nav-btn active" onclick="switchTab('tabActive', this)">🎯 Batch Aktif</button>
-      <button class="nav-btn" onclick="switchTab('tabSearch', this)">🔍 Cek Jadwal</button>
+      <button class="nav-btn" onclick="switchTab('tabSearch', this)">🔍 Cek Jadwal manual</button>
       <button class="nav-btn" onclick="switchTab('tabLinks', this)">⚡ Akses & Link</button>
       <button class="nav-btn" onclick="switchTab('tabArchive', this)">📦 Arsip</button>
     </nav>
   </div>
 
-  <!-- TAB 1: BATCH AKTIF -->
   <div class="tab-pane active" id="tabActive">
     <div class="glass-card">
-      <h2 class="card-title">🚀 Jadwal Running (21 Sept 2026)</h2>
+      <h2 class="card-title">🚀 Jadwal Batch (21 Sept 2026)</h2>
       <div class="schedule-list" id="activeScheduleContainer"></div>
     </div>
   </div>
 
-  <!-- TAB 2: CEK JADWAL -->
   <div class="tab-pane" id="tabSearch">
     <div class="glass-card">
       <h2 class="card-title">🔍 Cari Berdasarkan Tanggal</h2>
@@ -479,7 +477,6 @@
     </div>
   </div>
 
-  <!-- TAB 3: AKSES & LINK -->
   <div class="tab-pane" id="tabLinks">
     <div class="glass-card">
       <h2 class="card-title">🔗 Link Akses New Staff (21 Sept 2026)</h2>
@@ -522,7 +519,6 @@
     </div>
   </div>
 
-  <!-- TAB 4: ARSIP -->
   <div class="tab-pane" id="tabArchive">
     <div class="glass-card">
       <h2 class="card-title">📁 Arsip Jadwal (Batch 26 Agustus 2026)</h2>
@@ -530,10 +526,9 @@
     </div>
   </div>
 
-  <footer>Digimap Trainer Onboarding System</footer>
+  <footer>Digimap Trainer Onboarding System | All Right Reserved @frans</footer>
 </div>
 
-<!-- iOS Cupertino Date Picker Sheet -->
 <div class="ios-modal-overlay" id="dateModal" onclick="closeModalOnOverlay(event, 'dateModal')">
   <div class="ios-sheet">
     <div class="ios-grab-handle"></div>
@@ -543,13 +538,12 @@
       <span class="ios-sheet-btn-done" onclick="confirmDateSelect()">Selesai</span>
     </div>
     <div class="ios-date-picker-box">
-      <label style="font-size:0.78rem; color:var(--text-muted); font-weight:600; text-align:center;">TANGGAL TARGET</label>
+      <label style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-align:center;">TANGGAL TARGET</label>
       <input type="date" id="datePickerInput" class="ios-date-input" value="2026-09-21">
     </div>
   </div>
 </div>
 
-<!-- iOS Cupertino Trainer Picker Sheet -->
 <div class="ios-modal-overlay" id="trainerModal" onclick="closeModalOnOverlay(event, 'trainerModal')">
   <div class="ios-sheet">
     <div class="ios-grab-handle"></div>
@@ -720,7 +714,6 @@
     document.getElementById("themeBtn").innerText = document.body.classList.contains("light-mode") ? "☀️" : "🌙";
   }
 
-  /* iOS Sheet Handlers */
   function openModal(id) {
     const modal = document.getElementById(id);
     modal.style.display = "flex";
