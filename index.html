@@ -9,22 +9,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-base: #030408;
+    --bg-base: #04060a;
     --glass-card: rgba(255, 255, 255, 0.05);
     --glass-card-hover: rgba(255, 255, 255, 0.09);
-    --glass-card-active: rgba(255, 255, 255, 0.12);
-    --glass-border: rgba(255, 255, 255, 0.14);
-    --glass-border-strong: rgba(255, 255, 255, 0.28);
-    --glass-highlight: rgba(255, 255, 255, 0.22);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-border-strong: rgba(255, 255, 255, 0.25);
+    --glass-highlight: rgba(255, 255, 255, 0.2);
     --text-main: #f8fafc;
     --text-sub: #94a3b8;
     --text-muted: #64748b;
     --accent: #0a84ff;
-    --accent-glow: rgba(10, 132, 255, 0.45);
-    --accent-soft: rgba(10, 132, 255, 0.18);
-    --accent-border: rgba(10, 132, 255, 0.5);
+    --accent-glow: rgba(10, 132, 255, 0.4);
+    --accent-soft: rgba(10, 132, 255, 0.16);
+    --accent-border: rgba(10, 132, 255, 0.45);
     --danger: #ff453a;
-    --danger-soft: rgba(255, 69, 58, 0.18);
+    --danger-soft: rgba(255, 69, 58, 0.16);
     --radius-xl: 28px;
     --radius-lg: 20px;
     --radius-md: 14px;
@@ -35,17 +34,16 @@
 
   body.light-mode {
     --bg-base: #eaf0f8;
-    --glass-card: rgba(255, 255, 255, 0.65);
-    --glass-card-hover: rgba(255, 255, 255, 0.85);
-    --glass-card-active: rgba(255, 255, 255, 0.95);
+    --glass-card: rgba(255, 255, 255, 0.7);
+    --glass-card-hover: rgba(255, 255, 255, 0.9);
     --glass-border: rgba(255, 255, 255, 0.8);
     --glass-border-strong: rgba(0, 0, 0, 0.15);
-    --glass-highlight: rgba(255, 255, 255, 0.9);
+    --glass-highlight: rgba(255, 255, 255, 0.95);
     --text-main: #0f172a;
     --text-sub: #475569;
     --text-muted: #64748b;
     --accent: #0066cc;
-    --accent-glow: rgba(0, 102, 204, 0.25);
+    --accent-glow: rgba(0, 102, 204, 0.22);
     --accent-soft: rgba(0, 102, 204, 0.12);
   }
 
@@ -64,30 +62,61 @@
     transition: background 0.4s ease, color 0.4s ease;
   }
 
-  /* Liquid Glass Animated Orbs */
+  /* Tonkotsuboy Particle Background Layer */
+  #particles-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    background: radial-gradient(circle at center, transparent 0%, rgba(4, 6, 10, 0.85) 100%);
+  }
+  body.light-mode #particles-bg {
+    background: radial-gradient(circle at center, transparent 0%, rgba(220, 230, 245, 0.85) 100%);
+  }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(10,132,255,0.4));
+    box-shadow: 0 0 10px rgba(10, 132, 255, 0.6);
+    animation: particleFloat var(--duration) ease-in-out infinite;
+    animation-delay: var(--delay);
+    opacity: 0;
+  }
+
+  @keyframes particleFloat {
+    0% {
+      transform: translateY(0) translateX(0) scale(0.8);
+      opacity: 0;
+    }
+    20% {
+      opacity: var(--p-opacity, 0.7);
+    }
+    80% {
+      opacity: var(--p-opacity, 0.7);
+    }
+    100% {
+      transform: translateY(-110vh) translateX(50px) scale(1.2);
+      opacity: 0;
+    }
+  }
+
   .glow-orb {
     position: fixed;
     border-radius: 50%;
     filter: blur(130px);
     z-index: 0;
     pointer-events: none !important;
-    opacity: 0.45;
-    animation: liquidDrift 22s ease-in-out infinite alternate;
+    opacity: 0.4;
   }
-  .orb-1 { top: -120px; left: -100px; width: 400px; height: 400px; background: radial-gradient(circle, #0a84ff, transparent 70%); }
-  .orb-2 { bottom: -120px; right: -100px; width: 420px; height: 420px; background: radial-gradient(circle, #bf5af2, transparent 70%); }
-  .orb-3 { top: 45%; left: 50%; transform: translate(-50%, -50%); width: 350px; height: 350px; background: radial-gradient(circle, #ff2d55, transparent 70%); opacity: 0.25; }
-
-  @keyframes liquidDrift {
-    0% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(35px, -25px) scale(1.08); }
-    100% { transform: translate(-25px, 35px) scale(0.95); }
-  }
+  .orb-1 { top: -120px; left: -100px; width: 400px; height: 400px; background: #0a84ff; }
+  .orb-2 { bottom: -120px; right: -100px; width: 420px; height: 420px; background: #bf5af2; }
 
   .wrap { max-width: 680px; margin: 0 auto; position: relative; z-index: 1; }
 
-  /* Header */
-  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+  /* Header Section */
+  .header { margin-bottom: 22px; }
   .brand-badge {
     font-family: var(--font-mono);
     font-size: 0.7rem;
@@ -96,7 +125,7 @@
     color: var(--accent);
     background: var(--accent-soft);
     border: 1px solid var(--accent-border);
-    padding: 5px 12px;
+    padding: 4px 12px;
     border-radius: 30px;
     display: inline-flex;
     align-items: center;
@@ -106,24 +135,32 @@
     box-shadow: inset 0 1px 1px var(--glass-highlight);
   }
   .brand-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
-  h1 { font-size: clamp(1.55rem, 5vw, 1.95rem); font-weight: 800; margin: 0; letter-spacing: -0.03em; }
 
-  .theme-btn {
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: var(--glass-card);
-    border: 1px solid var(--glass-border);
-    color: var(--text-main);
-    font-size: 1.15rem;
-    cursor: pointer;
+  /* Title row with inline theme button */
+  .title-row {
     display: flex;
     align-items: center;
+    gap: 12px;
+  }
+  h1 { font-size: clamp(1.5rem, 5vw, 1.95rem); font-weight: 800; margin: 0; letter-spacing: -0.03em; }
+
+  .theme-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--glass-card);
+    border: 1px solid var(--glass-border-strong);
+    color: var(--text-main);
+    font-size: 1rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.25), inset 0 1px 1px var(--glass-highlight);
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+    backdrop-filter: blur(24px) saturate(190%);
+    -webkit-backdrop-filter: blur(24px) saturate(190%);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25), inset 0 1px 1px var(--glass-highlight);
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s ease;
+    flex-shrink: 0;
   }
   .theme-btn:active { transform: scale(0.90) rotate(-12deg); }
 
@@ -198,12 +235,10 @@
     letter-spacing: -0.01em;
   }
 
-  /* Tab View Logic */
   .tab-pane { display: none; }
   .tab-pane.active { display: block; animation: glassFade 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
   @keyframes glassFade { from { opacity: 0; transform: translateY(8px) scale(0.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-  /* Interactive Glass Buttons */
   .btn {
     min-height: 48px;
     padding: 0 20px;
@@ -234,19 +269,18 @@
     backdrop-filter: blur(16px);
     box-shadow: inset 0 1px 1px var(--glass-highlight);
   }
-  .btn-ios-trigger:active { background: var(--glass-card-hover); }
 
-  /* Schedule Item Cards */
+  /* Schedule Item Cards - TANPA GARIS BIRU DI SEBELAH KIRI */
   .schedule-list { display: flex; flex-direction: column; gap: 12px; }
   .schedule-item {
     background: var(--glass-card);
     border: 1px solid var(--glass-border);
-    border-left: 4px solid var(--accent);
+    /* Garis biru sebelah kiri telah dihapus */
     border-radius: var(--radius-lg);
     padding: 16px 18px;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), inset 0 1px 1px var(--glass-highlight);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), inset 0 1px 1px var(--glass-highlight);
     transition: all 0.25s ease;
   }
   .schedule-item:hover {
@@ -289,7 +323,6 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
   }
 
-  /* Link Grid Cards */
   .link-grid { display: flex; flex-direction: column; gap: 12px; }
   .link-card {
     display: flex;
@@ -323,7 +356,7 @@
     box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3);
   }
 
-  /* iOS 27 Glass Bottom Sheet Modal */
+  /* iOS Bottom Sheet Modal */
   .ios-modal-overlay {
     position: fixed;
     inset: 0;
@@ -345,7 +378,7 @@
   .ios-sheet {
     width: 100%;
     max-width: 500px;
-    background: rgba(24, 28, 42, 0.85);
+    background: rgba(24, 28, 42, 0.88);
     border-top-left-radius: 32px;
     border-top-right-radius: 32px;
     border-top: 1px solid var(--glass-border-strong);
@@ -358,7 +391,7 @@
     box-sizing: border-box;
   }
   body.light-mode .ios-sheet {
-    background: rgba(242, 242, 247, 0.92);
+    background: rgba(242, 242, 247, 0.94);
     border-top-color: rgba(255, 255, 255, 0.9);
   }
   .ios-modal-overlay.open .ios-sheet {
@@ -402,7 +435,6 @@
     cursor: pointer;
   }
 
-  /* iOS Grouped List */
   .ios-grouped-list {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 20px;
@@ -439,7 +471,6 @@
   }
   .ios-chevron { color: var(--text-muted); font-size: 0.95rem; font-weight: 800; }
 
-  /* Glass Date Picker Box */
   .ios-date-picker-box {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 20px;
@@ -492,17 +523,19 @@
 </head>
 <body>
 
+<!-- Animated Particle Background Layer -->
+<div id="particles-bg"></div>
+
 <div class="glow-orb orb-1"></div>
 <div class="glow-orb orb-2"></div>
-<div class="glow-orb orb-3"></div>
 
 <div class="wrap">
   <div class="header">
-    <div>
-      <span class="brand-badge">Digimap Trainer</span>
+    <span class="brand-badge">Digimap Trainer</span>
+    <div class="title-row">
       <h1>Jadwal Training Staff</h1>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Beralih Mode">🌙</button>
     </div>
-    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Beralih Mode">🌙</button>
   </div>
 
   <div class="nav-sticky-container">
@@ -597,7 +630,6 @@
   <footer>Digimap Trainer Onboarding System | All Right Reserved @frans</footer>
 </div>
 
-<!-- iOS Cupertino Date Picker Sheet -->
 <div class="ios-modal-overlay" id="dateModal" onclick="closeModalOnOverlay(event, 'dateModal')">
   <div class="ios-sheet">
     <div class="ios-grab-handle"></div>
@@ -613,7 +645,6 @@
   </div>
 </div>
 
-<!-- iOS Cupertino Trainer Picker Sheet -->
 <div class="ios-modal-overlay" id="trainerModal" onclick="closeModalOnOverlay(event, 'trainerModal')">
   <div class="ios-sheet">
     <div class="ios-grab-handle"></div>
@@ -686,6 +717,24 @@
   let activeTrainerMap = {};
   let selectedTrainerName = null;
 
+  function initParticleBackground() {
+    const container = document.getElementById("particles-bg");
+    const count = 30;
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement("div");
+      p.className = "particle";
+      const size = Math.random() * 4 + 2;
+      p.style.width = `${size}px`;
+      p.style.height = `${size}px`;
+      p.style.left = `${Math.random() * 100}%`;
+      p.style.top = `${Math.random() * 100}%`;
+      p.style.setProperty("--duration", `${Math.random() * 14 + 10}s`);
+      p.style.setProperty("--delay", `${Math.random() * 8}s`);
+      p.style.setProperty("--p-opacity", `${Math.random() * 0.6 + 0.3}`);
+      container.appendChild(p);
+    }
+  }
+
   function formatDate(d) {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   }
@@ -749,7 +798,7 @@
       const item = scheduleMap[ymd];
       if (item.type === "holiday") {
         return `
-          <div class="schedule-item" style="border-left-color:var(--danger);">
+          <div class="schedule-item" style="border-color:rgba(255,69,58,0.3); background:var(--danger-soft);">
             <div class="schedule-item-date">${item.dayName}, ${item.dateNum} ${item.monthName} 2026</div>
             <span class="schedule-item-topic">🎌 Libur Nasional: ${item.name}</span>
           </div>
@@ -823,7 +872,7 @@
         </div>
       `;
     } else if (entry && entry.type === "holiday") {
-      container.innerHTML = `<div class="schedule-item" style="border-left-color:var(--danger);"><span class="schedule-item-topic">Libur: ${entry.name}</span></div>`;
+      container.innerHTML = `<div class="schedule-item" style="background:var(--danger-soft); border-color:rgba(255,69,58,0.3);"><span class="schedule-item-topic">Libur: ${entry.name}</span></div>`;
     } else {
       container.innerHTML = `<div style="font-size:0.85rem; color:var(--text-muted); padding:10px 0;">Tidak ada sesi training publik pada tanggal ini.</div>`;
     }
@@ -871,6 +920,8 @@
   }
 
   window.onload = function() {
+    initParticleBackground();
+
     const activeData = generateSchedule(ACTIVE_START_DATE, activeMasterData);
     activeScheduleMap = activeData.map;
     activeTrainerMap = activeData.trainerMap;
