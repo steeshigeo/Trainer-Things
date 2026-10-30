@@ -34,11 +34,11 @@
 
   body.light-mode {
     --bg-base: #eaf0f8;
-    --glass-card: rgba(255, 255, 255, 0.55);
-    --glass-card-hover: rgba(255, 255, 255, 0.75);
+    --glass-card: rgba(255, 255, 255, 0.65);
+    --glass-card-hover: rgba(255, 255, 255, 0.85);
     --glass-border: rgba(255, 255, 255, 0.8);
     --glass-border-strong: rgba(0, 0, 0, 0.15);
-    --glass-highlight: rgba(255, 255, 255, 0.9);
+    --glass-highlight: rgba(255, 255, 255, 0.95);
     --text-main: #0f172a;
     --text-sub: #475569;
     --text-muted: #64748b;
@@ -48,7 +48,7 @@
   }
 
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  button, input { font: inherit; color: inherit; border: none; background: none; }
+  button, input, select { font: inherit; color: inherit; border: none; background: none; }
 
   body {
     margin: 0;
@@ -96,18 +96,18 @@
   .header { margin-bottom: 22px; }
   .brand-badge {
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     color: var(--accent);
     background: var(--accent-soft);
     border: 1px solid var(--accent-border);
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: 30px;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     box-shadow: inset 0 1px 1px var(--glass-highlight);
@@ -117,18 +117,25 @@
   .title-row {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
   }
   h1 { font-size: clamp(1.5rem, 5vw, 1.95rem); font-weight: 800; margin: 0; letter-spacing: -0.03em; }
 
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
   .theme-btn {
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: var(--glass-card);
     border: 1px solid var(--glass-border-strong);
     color: var(--text-main);
-    font-size: 1rem;
+    font-size: 1.05rem;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -136,7 +143,7 @@
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     box-shadow: 0 4px 16px rgba(0,0,0,0.2), inset 0 1px 1px var(--glass-highlight);
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, background 0.2s ease;
     flex-shrink: 0;
   }
   .theme-btn:active { transform: scale(0.90) rotate(-12deg); }
@@ -333,6 +340,53 @@
     box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3);
   }
 
+  .archive-section {
+    margin-bottom: 24px;
+  }
+  .archive-section:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Form Elements & Inputs for Settings */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .form-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-sub);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .form-input, .form-select {
+    width: 100%;
+    height: 46px;
+    padding: 0 14px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border-strong);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+    font-size: 0.88rem;
+    font-weight: 600;
+    outline: none;
+    box-shadow: inset 0 1px 1px var(--glass-highlight);
+  }
+  body.light-mode .form-input, body.light-mode .form-select {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.15);
+  }
+  .form-select option {
+    background: #141824;
+    color: #ffffff;
+  }
+  body.light-mode .form-select option {
+    background: #ffffff;
+    color: #0f172a;
+  }
+
   .ios-modal-overlay {
     position: fixed;
     inset: 0;
@@ -353,8 +407,8 @@
 
   .ios-sheet {
     width: 100%;
-    max-width: 500px;
-    background: rgba(20, 24, 36, 0.88);
+    max-width: 520px;
+    background: rgba(20, 24, 36, 0.92);
     border-top-left-radius: 32px;
     border-top-right-radius: 32px;
     border-top: 1px solid var(--glass-border-strong);
@@ -365,9 +419,11 @@
     transform: translateY(100%);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     box-sizing: border-box;
+    max-height: 85vh;
+    overflow-y: auto;
   }
   body.light-mode .ios-sheet {
-    background: rgba(242, 242, 247, 0.94);
+    background: rgba(242, 242, 247, 0.96);
     border-top-color: rgba(255, 255, 255, 0.9);
   }
   .ios-modal-overlay.open .ios-sheet {
@@ -487,6 +543,16 @@
     margin: 0;
   }
 
+  .settings-section-title {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin: 18px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
   footer {
     text-align: center;
     color: var(--text-muted);
@@ -503,10 +569,13 @@
 
 <div class="wrap">
   <div class="header">
-    <span class="brand-badge">Digimap Trainer</span>
+    <span class="brand-badge">Digimap Partner Trainer</span>
     <div class="title-row">
       <h1>Jadwal Training Staff</h1>
-      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Beralih Mode">🌙</button>
+      <div class="header-actions">
+        <button class="theme-btn" onclick="openModal('settingsModal')" title="Pengaturan Jadwal & Link">⚙️</button>
+        <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Beralih Mode">🌙</button>
+      </div>
     </div>
   </div>
 
@@ -553,55 +622,23 @@
   <div class="tab-pane" id="tabLinks">
     <div class="glass-card">
       <h2 class="card-title">🔗 Link Akses New Staff (2 Nov 2026)</h2>
-      <div class="link-grid">
-        <a href="https://teams.microsoft.com/meet/44897272494912?p=3SBUsvUVGfg0miF3h8" target="_blank" rel="noopener" class="link-card" style="border-color:var(--accent-border); background:var(--accent-soft);">
-          <span class="link-icon">💻</span>
-          <div>Link Teams New Staff</div>
-        </a>
-        <a href="https://padlet.com/zalianadigimap/NewStaff_21Sept2026" target="_blank" rel="noopener" class="link-card">
-          <span class="link-icon">🧵</span>
-          <div>Padlet New Staff</div>
-        </a>
-        <a href="https://docs.google.com/spreadsheets/d/1LNRcRyfcSDkPCZlKvZawvtHbLgF42x8r1ZEbSJWKJQ0/edit?usp=sharing" target="_blank" rel="noopener" class="link-card">
-          <span class="link-icon">📋</span>
-          <div>Absensi Training</div>
-        </a>
-        <a href="https://docs.google.com/spreadsheets/d/1wVB1gFV1sGH4j9WvtBRYXqR-fVaDjOhTQ6xnDJ4TLcU/edit?usp=sharing" target="_blank" rel="noopener" class="link-card">
-          <span class="link-icon">💬</span>
-          <div>Feedback Training</div>
-        </a>
-        <a href="https://forms.gle/cs8nefmppk34yHfW8" target="_blank" rel="noopener" class="link-card">
-          <span class="link-icon">📝</span>
-          <div>Form Survey</div>
-        </a>
-      </div>
+      <div class="link-grid" id="accessLinksContainer"></div>
     </div>
 
     <div class="glass-card">
       <h2 class="card-title">📦 Modul & Materi Training</h2>
-      <div class="link-grid">
-        <a href="https://mega.nz/folder/Mld3iL5K#cZi_NcO2KbcupTim7Uafcw" target="_blank" rel="noopener" class="link-card">
-          <span class="link-icon">🍎</span>
-          <div>Materi Apple (MEGA)</div>
-        </a>
-        <a href="https://mega.nz/folder/d8Fg3Ywa#MobjiJndMsUhJ-fQJ4WErQ" target="_blank" rel="noopener" class="link-card">
-          <span class="link-icon">📚</span>
-          <div>New Staff Training Module</div>
-        </a>
-      </div>
+      <div class="link-grid" id="moduleLinksContainer"></div>
     </div>
   </div>
 
   <div class="tab-pane" id="tabArchive">
-    <div class="glass-card">
-      <h2 class="card-title">📁 Arsip Jadwal (Batch 26 Agustus 2026)</h2>
-      <div class="schedule-list" id="archiveScheduleContainer"></div>
-    </div>
+    <div id="archiveContainer"></div>
   </div>
 
   <footer>Digimap Trainer Onboarding System | All Right Reserved @frans</footer>
 </div>
 
+<!-- Modal Date Picker -->
 <div class="ios-modal-overlay" id="dateModal" onclick="closeModalOnOverlay(event, 'dateModal')">
   <div class="ios-sheet">
     <div class="ios-grab-handle"></div>
@@ -617,6 +654,7 @@
   </div>
 </div>
 
+<!-- Modal Trainer Picker -->
 <div class="ios-modal-overlay" id="trainerModal" onclick="closeModalOnOverlay(event, 'trainerModal')">
   <div class="ios-sheet">
     <div class="ios-grab-handle"></div>
@@ -629,11 +667,81 @@
   </div>
 </div>
 
+<!-- Modal Settings / Pengaturan Data -->
+<div class="ios-modal-overlay" id="settingsModal" onclick="closeModalOnOverlay(event, 'settingsModal')">
+  <div class="ios-sheet">
+    <div class="ios-grab-handle"></div>
+    <div class="ios-sheet-header">
+      <span class="ios-sheet-btn-cancel" onclick="closeModal('settingsModal')">Tutup</span>
+      <span class="ios-sheet-title">⚙️ Pengaturan System</span>
+      <span class="ios-sheet-btn-done" onclick="saveAllSettings()">Simpan</span>
+    </div>
+
+    <div class="settings-section-title">👨‍🏫 Edit Staff & Trainer (Batch Aktif)</div>
+    <div class="form-group">
+      <label class="form-label">Pilih Materi / Sesi Training</label>
+      <select id="editSessionSelect" class="form-select" onchange="loadSessionDataToEdit()">
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tanggal Sesi Terkait</label>
+      <input type="text" id="editSessionDateDisplay" class="form-input" readonly style="opacity: 0.7;">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Daftar Trainer / PIC (pisahkan koma)</label>
+      <input type="text" id="editSessionPicInput" class="form-input" placeholder="contoh: Nama A, Nama B">
+    </div>
+
+    <div class="settings-section-title" style="margin-top: 24px;">🔗 Edit Link Akses & Modul</div>
+    <div class="form-group">
+      <label class="form-label">Link Microsoft Teams</label>
+      <input type="url" id="linkTeamsInput" class="form-input">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Link Padlet New Staff</label>
+      <input type="url" id="linkPadletInput" class="form-input">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Link Spreadsheet Absensi</label>
+      <input type="url" id="linkAbsensiInput" class="form-input">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Link Feedback Training</label>
+      <input type="url" id="linkFeedbackInput" class="form-input">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Link Form Survey</label>
+      <input type="url" id="linkSurveyInput" class="form-input">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Link MEGA Materi Apple</label>
+      <input type="url" id="linkMegaAppleInput" class="form-input">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Link MEGA Module New Staff</label>
+      <input type="url" id="linkMegaModuleInput" class="form-input">
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="saveAllSettings()" style="margin-top: 16px;">Simpan Semua Perubahan</button>
+  </div>
+</div>
+
 <script>
   const ACTIVE_START_DATE = "2026-11-02";
-  const ARCHIVE_START_DATE = "2026-08-26";
 
-  const activeMasterData = [
+  // Data Dynamic Links
+  let linksData = {
+    teams: "https://teams.microsoft.com/meet/44897272494912?p=3SBUsvUVGfg0miF3h8",
+    padlet: "https://padlet.com/zalianadigimap/NewStaff_21Sept2026",
+    absensi: "https://docs.google.com/spreadsheets/d/1LNRcRyfcSDkPCZlKvZawvtHbLgF42x8r1ZEbSJWKJQ0/edit?usp=sharing",
+    feedback: "https://docs.google.com/spreadsheets/d/1wVB1gFV1sGH4j9WvtBRYXqR-fVaDjOhTQ6xnDJ4TLcU/edit?usp=sharing",
+    survey: "https://forms.gle/cs8nefmppk34yHfW8",
+    megaApple: "https://mega.nz/folder/Mld3iL5K#cZi_NcO2KbcupTim7Uafcw",
+    megaModule: "https://mega.nz/folder/d8Fg3Ywa#MobjiJndMsUhJ-fQJ4WErQ"
+  };
+
+  // Batch Aktif Terbaru
+  let activeMasterData = [
     { topic: "ACE", pic: "Ni Kadek Arum Darmayanti, Oky Hidayatulloh" },
     { topic: "Digicares 1", pic: "Fernaldi Akbar" },
     { topic: "Digicares 2", pic: "Indah Rama Dhani, Fadlun" },
@@ -648,19 +756,44 @@
     { topic: "Apple Watch & watchOS", pic: "Rachel Jennifer Victoria, Febi Ristian, Andy Firmansyah" }
   ];
 
-  const archiveMasterData = [
-    { topic: "ACE", pic: "Ni Kadek Arum Darmayanti" },
-    { topic: "Digicares 1", pic: "Fernaldi Akbar" },
-    { topic: "Digicares 2", pic: "Vionita, Indah Rama Dhani" },
-    { topic: "Digicares 3", pic: "Yuniar Puspitasari, Chandra Dewi Kusumaningrum" },
-    { topic: "Accessories Workshop", pic: "Ferdiansyah Yogi Pratama, Dimas Anugrah Perdana" },
-    { topic: "iPhone Family", pic: "Dinda Audina, Usmani Abrar" },
-    { topic: "iPad Family", pic: "Widya Putri Kirana, Tommy" },
-    { topic: "iOS & iPadOS", pic: "Fadlun, Yoga Guntoro, Siti Fatimah Azzahrah" },
-    { topic: "Basic Technology", pic: "Frandy Putra, Muhammad Ridwan" },
-    { topic: "Mac Family", pic: "Muhammad Iqbal Augustiyant, Rima Mutia Kustianti, Oky Hidayatulloh" },
-    { topic: "macOS", pic: "Nentri Firmadoni, Jaya, Dede Riadi" },
-    { topic: "Apple Watch & watchOS", pic: "Rachel Jennifer Victoria, Febi Ristian, Andy Firmansyah" }
+  // Daftar Historis Arsip Batch Sebelumnya
+  const archiveBatchesData = [
+    {
+      title: "📁 Arsip Jadwal (Batch 21 September 2026)",
+      startDate: "2026-09-21",
+      masterData: [
+        { topic: "ACE", pic: "Ni Kadek Arum Darmayanti, Oky Hidayatulloh" },
+        { topic: "Digicares 1", pic: "Fernaldi Akbar" },
+        { topic: "Digicares 2", pic: "Indah Rama Dhani, Fadlun" },
+        { topic: "Digicares 3", pic: "Yuniar Puspitasari" },
+        { topic: "Accessories Workshop", pic: "Ferdiansyah Yogi Pratama, Dimas Anugrah Perdana" },
+        { topic: "iPhone Family", pic: "Dinda Audina, Usmani Abrar" },
+        { topic: "iPad Family", pic: "Widya Putri Kirana, Tommy" },
+        { topic: "iOS & iPadOS", pic: "Yoga Guntoro, Siti Fatimah Azzahrah" },
+        { topic: "Basic Technology", pic: "Frandy Putra, Muhammad Ridwan" },
+        { topic: "Mac Family", pic: "Muhammad Iqbal Augustiyant, Rima Mutia Kustianti, Oky Hidayatulloh" },
+        { topic: "macOS", pic: "Nentri Firmadoni, Jaya, Dede Riadi" },
+        { topic: "Apple Watch & watchOS", pic: "Rachel Jennifer Victoria, Febi Ristian, Andy Firmansyah" }
+      ]
+    },
+    {
+      title: "📁 Arsip Jadwal (Batch 26 Agustus 2026)",
+      startDate: "2026-08-26",
+      masterData: [
+        { topic: "ACE", pic: "Ni Kadek Arum Darmayanti" },
+        { topic: "Digicares 1", pic: "Fernaldi Akbar" },
+        { topic: "Digicares 2", pic: "Vionita, Indah Rama Dhani" },
+        { topic: "Digicares 3", pic: "Yuniar Puspitasari, Chandra Dewi Kusumaningrum" },
+        { topic: "Accessories Workshop", pic: "Ferdiansyah Yogi Pratama, Dimas Anugrah Perdana" },
+        { topic: "iPhone Family", pic: "Dinda Audina, Usmani Abrar" },
+        { topic: "iPad Family", pic: "Widya Putri Kirana, Tommy" },
+        { topic: "iOS & iPadOS", pic: "Fadlun, Yoga Guntoro, Siti Fatimah Azzahrah" },
+        { topic: "Basic Technology", pic: "Frandy Putra, Muhammad Ridwan" },
+        { topic: "Mac Family", pic: "Muhammad Iqbal Augustiyant, Rima Mutia Kustianti, Oky Hidayatulloh" },
+        { topic: "macOS", pic: "Nentri Firmadoni, Jaya, Dede Riadi" },
+        { topic: "Apple Watch & watchOS", pic: "Rachel Jennifer Victoria, Febi Ristian, Andy Firmansyah" }
+      ]
+    }
   ];
 
   const nationalHolidays2026 = {
@@ -685,7 +818,7 @@
   const colors = ["#0a84ff","#bf5af2","#ff375f","#30d158","#ff9f0a","#64d2ff"];
 
   let activeScheduleMap = {};
-  let archiveScheduleMap = {};
+  let allArchivesMap = {};
   let activeTrainerMap = {};
   let selectedTrainerName = null;
 
@@ -753,6 +886,7 @@
         };
 
         item.pic.split(",").map(n => n.trim()).forEach(name => {
+          if (!name) return;
           if (!trainerMap[name]) trainerMap[name] = [];
           trainerMap[name].push({ topic: item.topic, dayName: dayNames[day], dateNum: curr.getDate(), monthName: monthNames[curr.getMonth()] });
         });
@@ -764,9 +898,8 @@
     return { map, trainerMap };
   }
 
-  function renderList(containerId, scheduleMap) {
-    const el = document.getElementById(containerId);
-    el.innerHTML = Object.keys(scheduleMap).map(ymd => {
+  function renderListHtml(scheduleMap) {
+    return Object.keys(scheduleMap).map(ymd => {
       const item = scheduleMap[ymd];
       if (item.type === "holiday") {
         return `
@@ -776,7 +909,7 @@
           </div>
         `;
       }
-      const chips = item.pic.split(",").map(n => n.trim()).map(name => `
+      const chips = item.pic.split(",").map(n => n.trim()).filter(n => n).map(name => `
         <span class="trainer-chip-sm">
           <span class="avatar-mini" style="background:${hashColor(name)}">${initials(name)}</span>
           ${name}
@@ -793,6 +926,121 @@
     }).join("");
   }
 
+  function renderArchives() {
+    const container = document.getElementById("archiveContainer");
+    container.innerHTML = archiveBatchesData.map(batch => {
+      const generated = generateSchedule(batch.startDate, batch.masterData);
+      Object.assign(allArchivesMap, generated.map);
+      return `
+        <div class="glass-card archive-section">
+          <h2 class="card-title">${batch.title}</h2>
+          <div class="schedule-list">${renderListHtml(generated.map)}</div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function renderLinksTab() {
+    document.getElementById("accessLinksContainer").innerHTML = `
+      <a href="${linksData.teams}" target="_blank" rel="noopener" class="link-card" style="border-color:var(--accent-border); background:var(--accent-soft);">
+        <span class="link-icon">💻</span>
+        <div>Link Teams New Staff</div>
+      </a>
+      <a href="${linksData.padlet}" target="_blank" rel="noopener" class="link-card">
+        <span class="link-icon">🧵</span>
+        <div>Padlet New Staff</div>
+      </a>
+      <a href="${linksData.absensi}" target="_blank" rel="noopener" class="link-card">
+        <span class="link-icon">📋</span>
+        <div>Absensi Training</div>
+      </a>
+      <a href="${linksData.feedback}" target="_blank" rel="noopener" class="link-card">
+        <span class="link-icon">💬</span>
+        <div>Feedback Training</div>
+      </a>
+      <a href="${linksData.survey}" target="_blank" rel="noopener" class="link-card">
+        <span class="link-icon">📝</span>
+        <div>Form Survey</div>
+      </a>
+    `;
+
+    document.getElementById("moduleLinksContainer").innerHTML = `
+      <a href="${linksData.megaApple}" target="_blank" rel="noopener" class="link-card">
+        <span class="link-icon">🍎</span>
+        <div>Materi Apple (MEGA)</div>
+      </a>
+      <a href="${linksData.megaModule}" target="_blank" rel="noopener" class="link-card">
+        <span class="link-icon">📚</span>
+        <div>New Staff Training Module</div>
+      </a>
+    `;
+  }
+
+  function populateSettingsModalFields() {
+    const select = document.getElementById("editSessionSelect");
+    select.innerHTML = activeMasterData.map((item, index) => `
+      <option value="${index}">Sesi ${String(index + 1).padStart(2, '0')} - ${item.topic}</option>
+    `).join("");
+
+    // Set input link values
+    document.getElementById("linkTeamsInput").value = linksData.teams;
+    document.getElementById("linkPadletInput").value = linksData.padlet;
+    document.getElementById("linkAbsensiInput").value = linksData.absensi;
+    document.getElementById("linkFeedbackInput").value = linksData.feedback;
+    document.getElementById("linkSurveyInput").value = linksData.survey;
+    document.getElementById("linkMegaAppleInput").value = linksData.megaApple;
+    document.getElementById("linkMegaModuleInput").value = linksData.megaModule;
+
+    loadSessionDataToEdit();
+  }
+
+  function loadSessionDataToEdit() {
+    const idx = parseInt(document.getElementById("editSessionSelect").value) || 0;
+    const item = activeMasterData[idx];
+    if (!item) return;
+
+    // Find date from generated active schedule map
+    let foundDate = "Tanggal Tidak Ditemukan";
+    for (let ymd in activeScheduleMap) {
+      if (activeScheduleMap[ymd].topic === item.topic) {
+        const entry = activeScheduleMap[ymd];
+        foundDate = `${entry.dayName}, ${entry.dateNum} ${entry.monthName} 2026`;
+        break;
+      }
+    }
+
+    document.getElementById("editSessionDateDisplay").value = foundDate;
+    document.getElementById("editSessionPicInput").value = item.pic;
+  }
+
+  function saveAllSettings() {
+    // 1. Save Session Staff Edit
+    const idx = parseInt(document.getElementById("editSessionSelect").value);
+    if (!isNaN(idx) && activeMasterData[idx]) {
+      activeMasterData[idx].pic = document.getElementById("editSessionPicInput").value;
+    }
+
+    // 2. Save Link Edits
+    linksData.teams = document.getElementById("linkTeamsInput").value;
+    linksData.padlet = document.getElementById("linkPadletInput").value;
+    linksData.absensi = document.getElementById("linkAbsensiInput").value;
+    linksData.feedback = document.getElementById("linkFeedbackInput").value;
+    linksData.survey = document.getElementById("linkSurveyInput").value;
+    linksData.megaApple = document.getElementById("linkMegaAppleInput").value;
+    linksData.megaModule = document.getElementById("linkMegaModuleInput").value;
+
+    // 3. Re-generate and Re-render Application
+    const activeData = generateSchedule(ACTIVE_START_DATE, activeMasterData);
+    activeScheduleMap = activeData.map;
+    activeTrainerMap = activeData.trainerMap;
+
+    document.getElementById("activeScheduleContainer").innerHTML = renderListHtml(activeScheduleMap);
+    renderLinksTab();
+    populateTrainerModal();
+
+    closeModal("settingsModal");
+  }
+
   function switchTab(tabId, btn) {
     document.querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
     document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
@@ -806,15 +1054,20 @@
   }
 
   function openModal(id) {
+    if (id === "settingsModal") {
+      populateSettingsModalFields();
+    }
     const modal = document.getElementById(id);
     modal.style.display = "flex";
     setTimeout(() => modal.classList.add("open"), 10);
   }
+
   function closeModal(id) {
     const modal = document.getElementById(id);
     modal.classList.remove("open");
     setTimeout(() => modal.style.display = "none", 250);
   }
+
   function closeModalOnOverlay(e, id) { if (e.target === e.currentTarget) closeModal(id); }
 
   function confirmDateSelect() {
@@ -829,11 +1082,11 @@
 
   function executeDateCheck() {
     const val = document.getElementById("datePickerInput").value;
-    const entry = activeScheduleMap[val] || archiveScheduleMap[val];
+    const entry = activeScheduleMap[val] || allArchivesMap[val];
     const container = document.getElementById("dateResultContainer");
 
     if (entry && entry.type === "session") {
-      const chips = entry.pic.split(",").map(n => n.trim()).map(name => `
+      const chips = entry.pic.split(",").map(n => n.trim()).filter(n => n).map(name => `
         <span class="trainer-chip-sm"><span class="avatar-mini" style="background:${hashColor(name)}">${initials(name)}</span>${name}</span>
       `).join("");
       container.innerHTML = `
@@ -898,11 +1151,9 @@
     activeScheduleMap = activeData.map;
     activeTrainerMap = activeData.trainerMap;
 
-    const archiveData = generateSchedule(ARCHIVE_START_DATE, archiveMasterData);
-    archiveScheduleMap = archiveData.map;
-
-    renderList("activeScheduleContainer", activeScheduleMap);
-    renderList("archiveScheduleContainer", archiveScheduleMap);
+    document.getElementById("activeScheduleContainer").innerHTML = renderListHtml(activeScheduleMap);
+    renderLinksTab();
+    renderArchives();
     populateTrainerModal();
   };
 </script>
