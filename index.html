@@ -826,6 +826,20 @@
   let activeTrainerMap = {};
   let selectedTrainerName = null;
 
+  // Normalisasi segala format tanggal (YYYY-MM-DD, ISO, maupun Date string dari Google Sheets)
+  function normalizeDateYMD(raw) {
+    if (!raw) return "2026-11-02";
+    const str = String(raw).trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
+    if (/^\d{4}-\d{2}-\d{2}T/.test(str)) return str.slice(0, 10);
+
+    const parsed = new Date(str);
+    if (!isNaN(parsed.getTime())) {
+      return formatDate(parsed);
+    }
+    return "2026-11-02";
+  }
+
   function setSyncBadge(state, text) {
     const badge = document.getElementById("syncStatusBadge");
     badge.className = "sync-badge " + state;
@@ -837,6 +851,7 @@
   }
 
   function saveToLocalCache() {
+    activeStartDate = normalizeDateYMD(activeStartDate);
     localStorage.setItem("digimap_activeStartDate", activeStartDate);
     localStorage.setItem("digimap_activeMasterData", JSON.stringify(activeMasterData));
     localStorage.setItem("digimap_linksData", JSON.stringify(linksData));
@@ -846,12 +861,13 @@
     const d = localStorage.getItem("digimap_activeStartDate");
     const m = localStorage.getItem("digimap_activeMasterData");
     const l = localStorage.getItem("digimap_linksData");
-    if (d) activeStartDate = d;
+    if (d) activeStartDate = normalizeDateYMD(d);
     if (m) activeMasterData = JSON.parse(m);
     if (l) linksData = JSON.parse(l);
   }
 
   function rebuildUI() {
+    activeStartDate = normalizeDateYMD(activeStartDate);
     const activeData = generateSchedule(activeStartDate, activeMasterData);
     activeScheduleMap = activeData.map;
     activeTrainerMap = activeData.trainerMap;
@@ -876,7 +892,7 @@
       const result = await response.json();
 
       if (result.status === "success") {
-        if (result.activeStartDate) activeStartDate = result.activeStartDate;
+        if (result.activeStartDate) activeStartDate = normalizeDateYMD(result.activeStartDate);
         if (result.linksData) linksData = Object.assign(linksData, result.linksData);
         if (Array.isArray(result.activeMasterData) && result.activeMasterData.length > 0) {
           activeMasterData = result.activeMasterData;
@@ -916,9 +932,9 @@
   }
 
   function formatReadableDate(ymd) {
-    if (!ymd) return "";
-    const p = ymd.split("-");
-    if (p.length !== 3) return ymd;
+    const clean = normalizeDateYMD(ymd);
+    const p = clean.split("-");
+    if (p.length !== 3) return clean;
     const mIdx = parseInt(p[1], 10) - 1;
     return `${parseInt(p[2], 10)} ${monthNames[mIdx]} ${p[0]}`;
   }
@@ -935,7 +951,8 @@
   }
 
   function generateSchedule(startDateStr, masterData) {
-    let curr = new Date(startDateStr + "T00:00:00");
+    const cleanStart = normalizeDateYMD(startDateStr);
+    let curr = new Date(cleanStart + "T00:00:00");
     let map = {};
     let trainerMap = {};
     let idx = 0;
@@ -951,7 +968,7 @@
       let holiday = nationalHolidays2026[ymd];
 
       if (holiday) {
-        map[ymd] = { type: "holiday", name: holiday, dayName: dayNames[day], dateNum: curr.getDate(), monthName: monthNames[curr.getMonth()] };
+        map[ymd] = { type: "holiday", name: holiday, dayName: dayNames[day], dateNum: curr.getDate(), monthName: monthNames[curr.getMonth()], yearNum: curr.getFullYear() };
       } else {
         let item = masterData[idx];
         map[ymd] = {
@@ -961,13 +978,14 @@
           dayName: dayNames[day],
           dateNum: curr.getDate(),
           monthName: monthNames[curr.getMonth()],
+          yearNum: curr.getFullYear(),
           index: idx + 1
         };
 
         item.pic.split(",").map(n => n.trim()).forEach(name => {
           if (!name) return;
           if (!trainerMap[name]) trainerMap[name] = [];
-          trainerMap[name].push({ topic: item.topic, dayName: dayNames[day], dateNum: curr.getDate(), monthName: monthNames[curr.getMonth()] });
+          trainerMap[name].push({ topic: item.topic, dayName: dayNames[day], dateNum: curr.getDate(), monthName: monthNames[curr.getMonth()], yearNum: curr.getFullYear() });
         });
 
         idx++;
@@ -980,10 +998,11 @@
   function renderListHtml(scheduleMap) {
     return Object.keys(scheduleMap).map(ymd => {
       const item = scheduleMap[ymd];
+      const yr = item.yearNum || 2026;
       if (item.type === "holiday") {
         return `
           <div class="schedule-item" style="border-color:rgba(255,69,58,0.3); background:var(--danger-soft);">
-            <div class="schedule-item-date">${item.dayName}, ${item.dateNum} ${item.monthName} 2026</div>
+            <div class="schedule-item-date">${item.dayName}, ${item.dateNum} ${item.monthName} ${yr}</div>
             <span class="schedule-item-topic">🎌 Libur Nasional: ${item.name}</span>
           </div>
         `;
@@ -997,7 +1016,7 @@
 
       return `
         <div class="schedule-item">
-          <div class="schedule-item-date">${item.dayName}, ${item.dateNum} ${item.monthName} 2026 • Sesi ${String(item.index).padStart(2,'0')}</div>
+          <div class="schedule-item-date">${item.dayName}, ${item.dateNum} ${item.monthName} ${yr} • Sesi ${String(item.index).padStart(2,'0')}</div>
           <span class="schedule-item-topic">${item.topic}</span>
           <div class="trainer-chips-wrap">${chips}</div>
         </div>
@@ -1057,7 +1076,7 @@
   }
 
   function populateSettingsModalFields() {
-    document.getElementById("editStartDateInput").value = activeStartDate;
+    document.getElementById("editStartDateInput").value = normalizeDateYMD(activeStartDate);
 
     const container = document.getElementById("topicsEditContainer");
     container.innerHTML = activeMasterData.map((item, index) => {
@@ -1065,7 +1084,7 @@
       for (let ymd in activeScheduleMap) {
         if (activeScheduleMap[ymd].topic === item.topic) {
           const entry = activeScheduleMap[ymd];
-          sessionDateText = `${entry.dayName}, ${entry.dateNum} ${entry.monthName} 2026`;
+          sessionDateText = `${entry.dayName}, ${entry.dateNum} ${entry.monthName} ${entry.yearNum || 2026}`;
           break;
         }
       }
@@ -1092,7 +1111,7 @@
 
   async function saveAllSettings() {
     const newStartDate = document.getElementById("editStartDateInput").value;
-    if (newStartDate) activeStartDate = newStartDate;
+    if (newStartDate) activeStartDate = normalizeDateYMD(newStartDate);
 
     activeMasterData.forEach((item, index) => {
       const inputEl = document.getElementById(`topicPicInput_${index}`);
@@ -1111,7 +1130,7 @@
     rebuildUI();
 
     if (!isApiConfigured()) {
-      alert("Perubahan disimpan secara lokal. Isi GAS_API_URL di dalam kode untuk sinkronisasi ke Google Sheets.");
+      alert("Perubahan disimpan secara lokal.");
       closeModal("settingsModal");
       return;
     }
@@ -1202,7 +1221,7 @@
       `).join("");
       container.innerHTML = `
         <div class="schedule-item">
-          <div class="schedule-item-date">${entry.dayName}, ${entry.dateNum} ${entry.monthName} 2026</div>
+          <div class="schedule-item-date">${entry.dayName}, ${entry.dateNum} ${entry.monthName} ${entry.yearNum || 2026}</div>
           <span class="schedule-item-topic">${entry.topic}</span>
           <div class="trainer-chips-wrap">${chips}</div>
         </div>
@@ -1249,7 +1268,7 @@
 
     container.innerHTML = list.map(item => `
       <div class="schedule-item" style="margin-bottom:8px;">
-        <div class="schedule-item-date">${item.dayName}, ${item.dateNum} ${item.monthName} 2026</div>
+        <div class="schedule-item-date">${item.dayName}, ${item.dateNum} ${item.monthName} ${item.yearNum || 2026}</div>
         <span class="schedule-item-topic">${item.topic}</span>
       </div>
     `).join("");
