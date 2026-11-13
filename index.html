@@ -507,7 +507,7 @@
     box-shadow: 0 0 0 3px var(--accent-tint);
   }
 
-  /* Fix Date Picker Offside / Overflow across Safari & Chrome */
+  /* Date Picker Container */
   .date-field-wrapper {
     width: 100%;
     max-width: 100%;
@@ -919,11 +919,7 @@
       <input type="url" id="linkSurveyInput" class="form-input">
     </div>
     <div class="form-group">
-      <label class="form-label">MEGA Materi Apple</label>
-      <input type="url" id="linkMegaAppleInput" class="form-input">
-    </div>
-    <div class="form-group">
-      <label class="form-label">MEGA Module New Staff</label>
+      <label class="form-label">Modul & Materi Training (MEGA)</label>
       <input type="url" id="linkMegaModuleInput" class="form-input">
     </div>
 
@@ -934,8 +930,10 @@
 <script>
   const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwb7T1qZ4c8se48Z3kbpXDdsbhGopxARUfMzXMquc_0jTTNXf-7-9dwkkO_icqaEhf3BA/exec";
   const SETTINGS_PASSWORD = "Trainerhebat";
-  let isSettingsUnlocked = false;
+  const DEFAULT_MODULE_LINK = "https://mega.nz/folder/89sSCKgS#bIs5mmRBdfwPvK5b7PUAHA";
+  const LEGACY_MODULE_LINK = "https://mega.nz/folder/d8Fg3Ywa#MobjiJndMsUhJ-fQJ4WErQ";
 
+  let isSettingsUnlocked = false;
   let activeStartDate = "2026-11-02";
 
   let linksData = {
@@ -944,8 +942,7 @@
     absensi: "https://docs.google.com/spreadsheets/d/1LNRcRyfcSDkPCZlKvZawvtHbLgF42x8r1ZEbSJWKJQ0/edit?usp=sharing",
     feedback: "https://docs.google.com/spreadsheets/d/1wVB1gFV1sGH4j9WvtBRYXqR-fVaDjOhTQ6xnDJ4TLcU/edit?usp=sharing",
     survey: "https://forms.gle/cs8nefmppk34yHfW8",
-    megaApple: "https://mega.nz/folder/Mld3iL5K#cZi_NcO2KbcupTim7Uafcw",
-    megaModule: "https://mega.nz/folder/d8Fg3Ywa#MobjiJndMsUhJ-fQJ4WErQ"
+    megaModule: DEFAULT_MODULE_LINK
   };
 
   let activeMasterData = [
@@ -1040,6 +1037,14 @@
     return "2026-11-02";
   }
 
+  function normalizeLinks(incoming) {
+    if (!incoming) return;
+    Object.assign(linksData, incoming);
+    if (!linksData.megaModule || linksData.megaModule === LEGACY_MODULE_LINK) {
+      linksData.megaModule = DEFAULT_MODULE_LINK;
+    }
+  }
+
   function setSyncBadge(state, text) {
     const badge = document.getElementById("syncStatusBadge");
     const label = document.getElementById("syncStatusText");
@@ -1064,7 +1069,7 @@
     const l = localStorage.getItem("digimap_linksData");
     if (d) activeStartDate = normalizeDateYMD(d);
     if (m) activeMasterData = JSON.parse(m);
-    if (l) linksData = JSON.parse(l);
+    if (l) normalizeLinks(JSON.parse(l));
   }
 
   function rebuildUI() {
@@ -1088,7 +1093,7 @@
       return;
     }
 
-    setSyncBadge("", manual ? "Syncing..." : "Syncing...");
+    setSyncBadge("", "Syncing...");
 
     try {
       const response = await fetch(GAS_API_URL + "?t=" + Date.now());
@@ -1096,7 +1101,7 @@
 
       if (result.status === "success") {
         if (result.activeStartDate) activeStartDate = normalizeDateYMD(result.activeStartDate);
-        if (result.linksData) linksData = Object.assign(linksData, result.linksData);
+        if (result.linksData) normalizeLinks(result.linksData);
         if (Array.isArray(result.activeMasterData) && result.activeMasterData.length > 0) {
           activeMasterData = result.activeMasterData;
         }
@@ -1288,17 +1293,10 @@
     `;
 
     document.getElementById("moduleLinksContainer").innerHTML = `
-      <a href="${linksData.megaApple}" target="_blank" rel="noopener" class="link-row">
-        <div class="link-row-left">
-          <span class="link-badge-icon">${icons.folder}</span>
-          <span>Materi Apple (MEGA)</span>
-        </div>
-        <span class="chevron-right">›</span>
-      </a>
       <a href="${linksData.megaModule}" target="_blank" rel="noopener" class="link-row">
         <div class="link-row-left">
           <span class="link-badge-icon">${icons.folder}</span>
-          <span>New Staff Training Module</span>
+          <span>Modul & Materi Training</span>
         </div>
         <span class="chevron-right">›</span>
       </a>
@@ -1364,7 +1362,6 @@
     document.getElementById("linkAbsensiInput").value = linksData.absensi;
     document.getElementById("linkFeedbackInput").value = linksData.feedback;
     document.getElementById("linkSurveyInput").value = linksData.survey;
-    document.getElementById("linkMegaAppleInput").value = linksData.megaApple;
     document.getElementById("linkMegaModuleInput").value = linksData.megaModule;
   }
 
@@ -1382,7 +1379,6 @@
     linksData.absensi = document.getElementById("linkAbsensiInput").value;
     linksData.feedback = document.getElementById("linkFeedbackInput").value;
     linksData.survey = document.getElementById("linkSurveyInput").value;
-    linksData.megaApple = document.getElementById("linkMegaAppleInput").value;
     linksData.megaModule = document.getElementById("linkMegaModuleInput").value;
 
     saveToLocalCache();
